@@ -11,10 +11,10 @@
 
 # BitSnake
 
-![MIT License][MIT-shield]
-![Contributors][Contributors-shield]
-![Stars][Stars-shield]
-![Forks][Forks-shield]
-![Pygame][pygame-shield]
+[![MIT License][MIT-shield]][MIT-license-url]
+[![Contributors][Contributors-shield]][Contributors]
+[![Stars][Stars-shield]][Stars]
+[![Forks][Forks-shield]][Forks]
+[![Pygame][pygame-shield]][pygame]
 
 Bitsnake is a retro inspired arcade game built with Pygame, bringing a fast-paced and stylish reimagining of the classic Snake experience. Dodge your own tail, collect digital bytes and achieve your own high score in this neon-lit world!
