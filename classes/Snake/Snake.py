@@ -104,53 +104,6 @@ class Snake:
                     ):
                         screen.blit(self.body_br, rect)
 
-            # if index == 0:  # head of the snake
-            #     head_rel = self.body[1] - game.Vector2(self.body[0])
-            #     if head_rel == game.Vector2(1, 0):
-            #         screen.blit(self.head_left, rect)
-            #     elif head_rel == game.Vector2(-1, 0):
-            #         screen.blit(self.head_right, rect)
-            #     elif head_rel == game.Vector2(0, 1):
-            #         screen.blit(self.head_up, rect)
-            #     elif head_rel == game.Vector2(0, -1):
-            #         screen.blit(self.head_down, rect)
-
-            # elif index == len(self.body) - 1:  # tail of the snake
-            #     tail_rel = self.body[-2] - game.Vector2(self.body[-1])
-            #     if tail_rel == game.Vector2(1, 0):
-            #         screen.blit(self.tail_left, rect)
-            #     elif tail_rel == game.Vector2(-1, 0):
-            #         screen.blit(self.tail_right, rect)
-            #     elif tail_rel == game.Vector2(0, 1):
-            #         screen.blit(self.tail_up, rect)
-            #     elif tail_rel == game.Vector2(0, -1):
-            #         screen.blit(self.tail_down, rect)
-
-            # else:  # body of the snake
-            #     prev_block = game.Vector2(self.body[index + 1]) - game.Vector2(block)
-            #     next_block = game.Vector2(self.body[index - 1]) - game.Vector2(block)
-            #     if prev_block.x == next_block.x:  # vertical body
-            #         screen.blit(self.body_vertical, rect)
-            #     elif prev_block.y == next_block.y:  # horizontal body
-            #         screen.blit(self.body_horizontal, rect)
-            #     else:  # corners of the snake
-            #         if (prev_block.x == -1 and next_block.y == -1) or (
-            #             next_block.x == -1 and prev_block.y == -1
-            #         ):
-            #             screen.blit(self.body_tl, rect)
-            #         elif (prev_block.x == -1 and next_block.y == 1) or (
-            #             next_block.x == -1 and prev_block.y == 1
-            #         ):
-            #             screen.blit(self.body_bl, rect)
-            #         elif (prev_block.x == 1 and next_block.y == -1) or (
-            #             next_block.x == 1 and prev_block.y == -1
-            #         ):
-            #             screen.blit(self.body_tr, rect)
-            #         elif (prev_block.x == 1 and next_block.y == 1) or (
-            #             next_block.x == 1 and prev_block.y == 1
-            #         ):
-            #             screen.blit(self.body_br, rect)
-
     def update_head_graphics(self):
         """
         Update the graphics for the snake's head based on its direction.
@@ -165,16 +118,6 @@ class Snake:
         else:  # Vector2(0, -1)
             self.head_graphics = self.head_up
 
-        # head_relation = self.body[1] - self.body[0]
-        # if head_relation == Vector2(1, 0):
-        #     self.head_graphics = self.head_right
-        # elif head_relation == Vector2(-1, 0):
-        #     self.head_graphics = self.head_left
-        # elif head_relation == Vector2(0, 1):
-        #     self.head_graphics = self.head_down
-        # elif head_relation == Vector2(0, -1):
-        #     self.head_graphics = self.head_up
-
     def update_body_graphics(self):
         """
         Update the graphics for the snake's body based on its segments.
@@ -188,16 +131,6 @@ class Snake:
             self.tail_graphics = self.tail_down
         else:  # Vector2(0, -1)
             self.tail_graphics = self.tail_up
-      
-        # tail_relation = self.body[-2] - self.body[-1]
-        # if tail_relation == Vector2(1, 0):
-        #     self.tail_graphics = self.tail_left
-        # elif tail_relation == Vector2(-1, 0):
-        #     self.tail_graphics = self.tail_right
-        # elif tail_relation == Vector2(0, 1):
-        #     self.tail_graphics = self.tail_down
-        # elif tail_relation == Vector2(0, -1):
-        #     self.tail_graphics = self.tail_up
 
     def move(self):
         """
