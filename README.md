@@ -3,9 +3,9 @@
 [Contributors]: https://github.com/pedromst2000/BitSnake/graphs/contributors
 [Contributors-shield]: https://img.shields.io/badge/Contributors-1-orange.svg
 [Stars]: https://github.com/pedromst2000/BitSnake/stargazers
-[Stars-shield]: https://img.shields.io/badge/Stars-0-yellow.svg
+[Stars-shield]: https://img.shields.io/github/stars/pedromst2000/BitSnake?style=flat-square
 [Forks]: https://github.com/pedromst2000/BitSnake/network/members
-[Forks-shield]: https://img.shields.io/badge/Forks-0-blue.svg
+[Forks-shield]: https://img.shields.io/github/forks/pedromst2000/BitSnake?style=flat-square
 [pygame]: https://www.pygame.org/
 [pygame-shield]: https://img.shields.io/badge/Pygame-2.0.1-darkgreen.svg
 
