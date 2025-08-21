@@ -1,6 +1,10 @@
-CELL_SIZE = 50
-CELL_NUMBER_X = 19  # 950 / 50
-CELL_NUMBER_Y = 12  # 600 / 50
+import pygame as game
+
 SCREEN_WIDTH = 950
 SCREEN_HEIGHT = 600
-FPS = 10
+CELL_SIZE = 40
+CELL_NUMBER_X = SCREEN_WIDTH // CELL_SIZE
+CELL_NUMBER_Y = SCREEN_HEIGHT // CELL_SIZE
+FPS = 9.5
+MOVE_EVENT = game.USEREVENT + 1 # Event triggered for snake movement
+MOVE_INTERVAL_MS = 120 # milliseconds
