@@ -60,28 +60,25 @@ def main():
                     and main_game.snake.direction.y != -1
                 ):
                     main_game.snake.direction = game.Vector2(0, 1)
-                    move_sound.play()
+                move_sound.play()
                 if (
                     event.key in (game.K_LEFT, game.K_a)
-                    and main_game.snake.direction.x != 1
+                    and main_game.snake.direction.x != -1
                 ):
                     main_game.snake.direction = game.Vector2(-1, 0)
                     move_sound.play()
                 if (
                     event.key in (game.K_RIGHT, game.K_d)
-                    and main_game.snake.direction.x != -1
+                    and main_game.snake.direction.x != 1
                 ):
                     main_game.snake.direction = game.Vector2(1, 0)
                     move_sound.play()
 
-        screen.blit(
-            background_grass, (0, 0)
-        )  # Fill the screen with the background image
-        game.display.flip()  # Flip the display buffers - buffers are now displayed on the screen
-
+        screen.blit(background_grass, (0, 0))
         main_game.update_game()
         main_game.draw_elements(screen)
-        game.display.update()
+
+        game.display.flip()
         clock.tick(FPS)
 
     game.quit()  # Quit the game
