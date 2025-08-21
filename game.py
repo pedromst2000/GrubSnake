@@ -1,7 +1,13 @@
 from PIL import Image
 import pygame as game, sys
 from pathlib import Path
-from utils.settings import SCREEN_WIDTH, SCREEN_HEIGHT, FPS
+from utils.settings import (
+    SCREEN_WIDTH,
+    SCREEN_HEIGHT,
+    FPS,
+    MOVE_EVENT,
+    MOVE_INTERVAL_MS,
+)
 from classes.Main import Main
 
 
@@ -10,7 +16,6 @@ def main():
     game.init()
     screen = game.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     game.display.set_caption("BitSnake")
-    clock = game.time.Clock()  # Create a clock object to manage the frame rate
 
     background_grass = game.image.load(Path("assets/background.png")).convert()
     background_grass = game.transform.scale(
@@ -29,7 +34,14 @@ def main():
     move_sound = game.mixer.Sound(Path("assets/sounds/snake_rustling.wav"))
 
     # Game loop
-    main_game = Main()  # Initialize the main game class
+    main_game = Main(
+        eat_sound, game_over_sound, move_sound
+    )  # Initialize the main game class
+    game.time.set_timer(
+        MOVE_EVENT, MOVE_INTERVAL_MS
+    )  # Set the timer for snake movement
+    clock = game.time.Clock()  # Create a clock object to manage the frame rate
+
     running = True
     while running:
         for event in game.event.get():
@@ -67,8 +79,8 @@ def main():
         )  # Fill the screen with the background image
         game.display.flip()  # Flip the display buffers - buffers are now displayed on the screen
 
-        main_game.update_snake()
-        main_game.draw_snake(screen)
+        main_game.update_game()
+        main_game.draw_elements(screen)
         game.display.update()
         clock.tick(FPS)
 
