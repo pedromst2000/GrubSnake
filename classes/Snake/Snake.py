@@ -5,7 +5,8 @@ from utils.settings import CELL_SIZE
 
 class Snake:
     """
-    A class representing the snake in the game.
+    Handles drawing (head/body/tail sprites), movement, direction, growth, reset.
+     Body positions are on the grid (Vector2 of cell coordinates).
     """
 
     def __init__(self):
@@ -60,45 +61,32 @@ class Snake:
             "assets/graphics/body_bottom_left.png"
         ).convert_alpha()
 
-    def draw(self, screen: game.Surface):
+    def draw_snake(self, screen: game.Surface):
         """
         Method class for drawing the snake.
         """
+        self.update_head_graphics()
+        self.update_body_graphics()
+
         for index, block in enumerate(self.body):
             x_pos = int(block.x * CELL_SIZE)
             y_pos = int(block.y * CELL_SIZE)
             rect = game.Rect(x_pos, y_pos, CELL_SIZE, CELL_SIZE)
 
-            if index == 0:  # head of the snake
-                head_rel = self.body[1] - game.Vector2(self.body[0])
-                if head_rel == game.Vector2(1, 0):
-                    screen.blit(self.head_left, rect)
-                elif head_rel == game.Vector2(-1, 0):
-                    screen.blit(self.head_right, rect)
-                elif head_rel == game.Vector2(0, 1):
-                    screen.blit(self.head_up, rect)
-                elif head_rel == game.Vector2(0, -1):
-                    screen.blit(self.head_down, rect)
+            if index == 0:  # head
+                screen.blit(self.head_graphics, rect)
+            elif index == len(self.body) - 1:  # tail
+                screen.blit(self.tail_graphics, rect)
+            else:  # body segment
+                prev_block = self.body[index + 1] - block
+                next_block = self.body[index - 1] - block
 
-            elif index == len(self.body) - 1:  # tail of the snake
-                tail_rel = self.body[-2] - game.Vector2(self.body[-1])
-                if tail_rel == game.Vector2(1, 0):
-                    screen.blit(self.tail_left, rect)
-                elif tail_rel == game.Vector2(-1, 0):
-                    screen.blit(self.tail_right, rect)
-                elif tail_rel == game.Vector2(0, 1):
-                    screen.blit(self.tail_up, rect)
-                elif tail_rel == game.Vector2(0, -1):
-                    screen.blit(self.tail_down, rect)
-
-            else:  # body of the snake
-                prev_block = game.Vector2(self.body[index + 1]) - game.Vector2(block)
-                next_block = game.Vector2(self.body[index - 1]) - game.Vector2(block)
-                if prev_block.x == next_block.x:  # vertical body
+                if prev_block.x == next_block.x:
                     screen.blit(self.body_vertical, rect)
-                elif prev_block.y == next_block.y:  # horizontal body
+                elif prev_block.y == next_block.y:
                     screen.blit(self.body_horizontal, rect)
-                else:  # corners of the snake
+                else:
+                    # corners
                     if (prev_block.x == -1 and next_block.y == -1) or (
                         next_block.x == -1 and prev_block.y == -1
                     ):
@@ -116,6 +104,101 @@ class Snake:
                     ):
                         screen.blit(self.body_br, rect)
 
+            # if index == 0:  # head of the snake
+            #     head_rel = self.body[1] - game.Vector2(self.body[0])
+            #     if head_rel == game.Vector2(1, 0):
+            #         screen.blit(self.head_left, rect)
+            #     elif head_rel == game.Vector2(-1, 0):
+            #         screen.blit(self.head_right, rect)
+            #     elif head_rel == game.Vector2(0, 1):
+            #         screen.blit(self.head_up, rect)
+            #     elif head_rel == game.Vector2(0, -1):
+            #         screen.blit(self.head_down, rect)
+
+            # elif index == len(self.body) - 1:  # tail of the snake
+            #     tail_rel = self.body[-2] - game.Vector2(self.body[-1])
+            #     if tail_rel == game.Vector2(1, 0):
+            #         screen.blit(self.tail_left, rect)
+            #     elif tail_rel == game.Vector2(-1, 0):
+            #         screen.blit(self.tail_right, rect)
+            #     elif tail_rel == game.Vector2(0, 1):
+            #         screen.blit(self.tail_up, rect)
+            #     elif tail_rel == game.Vector2(0, -1):
+            #         screen.blit(self.tail_down, rect)
+
+            # else:  # body of the snake
+            #     prev_block = game.Vector2(self.body[index + 1]) - game.Vector2(block)
+            #     next_block = game.Vector2(self.body[index - 1]) - game.Vector2(block)
+            #     if prev_block.x == next_block.x:  # vertical body
+            #         screen.blit(self.body_vertical, rect)
+            #     elif prev_block.y == next_block.y:  # horizontal body
+            #         screen.blit(self.body_horizontal, rect)
+            #     else:  # corners of the snake
+            #         if (prev_block.x == -1 and next_block.y == -1) or (
+            #             next_block.x == -1 and prev_block.y == -1
+            #         ):
+            #             screen.blit(self.body_tl, rect)
+            #         elif (prev_block.x == -1 and next_block.y == 1) or (
+            #             next_block.x == -1 and prev_block.y == 1
+            #         ):
+            #             screen.blit(self.body_bl, rect)
+            #         elif (prev_block.x == 1 and next_block.y == -1) or (
+            #             next_block.x == 1 and prev_block.y == -1
+            #         ):
+            #             screen.blit(self.body_tr, rect)
+            #         elif (prev_block.x == 1 and next_block.y == 1) or (
+            #             next_block.x == 1 and prev_block.y == 1
+            #         ):
+            #             screen.blit(self.body_br, rect)
+
+    def update_head_graphics(self):
+        """
+        Update the graphics for the snake's head based on its direction.
+        """
+        relation = self.body[0] - self.body[1]
+        if relation == Vector2(1, 0):
+            self.head_graphics = self.head_right
+        elif relation == Vector2(-1, 0):
+            self.head_graphics = self.head_left
+        elif relation == Vector2(0, 1):
+            self.head_graphics = self.head_down
+        else:  # Vector2(0, -1)
+            self.head_graphics = self.head_up
+
+        # head_relation = self.body[1] - self.body[0]
+        # if head_relation == Vector2(1, 0):
+        #     self.head_graphics = self.head_right
+        # elif head_relation == Vector2(-1, 0):
+        #     self.head_graphics = self.head_left
+        # elif head_relation == Vector2(0, 1):
+        #     self.head_graphics = self.head_down
+        # elif head_relation == Vector2(0, -1):
+        #     self.head_graphics = self.head_up
+
+    def update_body_graphics(self):
+        """
+        Update the graphics for the snake's body based on its segments.
+        """
+        relation = self.body[-1] - self.body[-2]
+        if relation == Vector2(1, 0):
+            self.tail_graphics = self.tail_right
+        elif relation == Vector2(-1, 0):
+            self.tail_graphics = self.tail_left
+        elif relation == Vector2(0, 1):
+            self.tail_graphics = self.tail_down
+        else:  # Vector2(0, -1)
+            self.tail_graphics = self.tail_up
+      
+        # tail_relation = self.body[-2] - self.body[-1]
+        # if tail_relation == Vector2(1, 0):
+        #     self.tail_graphics = self.tail_left
+        # elif tail_relation == Vector2(-1, 0):
+        #     self.tail_graphics = self.tail_right
+        # elif tail_relation == Vector2(0, 1):
+        #     self.tail_graphics = self.tail_down
+        # elif tail_relation == Vector2(0, -1):
+        #     self.tail_graphics = self.tail_up
+
     def move(self):
         """
         Method class for moving the snake.
@@ -125,10 +208,8 @@ class Snake:
         else:  # If the snake is growing
             body_copy = self.body[:]  # Copy the entire body
             self.new_block = False  # Reset the growth flag
-        new_head = Vector2(
-            self.body[0][0] + int(self.direction.x),
-            self.body[0][1] + int(self.direction.y),
-        )
+
+        new_head = self.body[0] + self.direction
         body_copy.insert(0, new_head)
         self.body = body_copy
 
@@ -144,5 +225,4 @@ class Snake:
         """
         self.body = [Vector2(5, 5), Vector2(4, 5), Vector2(3, 5)]
         self.direction = game.Vector2(1, 0)
-        # self.new_block = Falsector2(1, 0)
-        # self.new_block = False
+        self.new_block = False
