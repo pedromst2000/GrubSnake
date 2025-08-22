@@ -148,7 +148,7 @@ class Snake:
 
     def add_block(self):
         """
-        Method class for adding a block to the snake.
+        Method class for adding a block to the snake. (Grow of the Snake)
         """
         self.new_block = True  # Set the flag to indicate the snake should grow
 
