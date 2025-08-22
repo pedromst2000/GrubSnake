@@ -33,9 +33,11 @@ def main():
     game_over_sound = game.mixer.Sound(Path("assets/sounds/game_over.wav"))
     move_sound = game.mixer.Sound(Path("assets/sounds/snake_rustling.wav"))
 
+    score = 0
+
     # Game loop
     main_game = Main(
-        eat_sound, game_over_sound, move_sound
+        eat_sound, game_over_sound, move_sound, score
     )  # Initialize the main game class
     game.time.set_timer(
         MOVE_EVENT, MOVE_INTERVAL_MS

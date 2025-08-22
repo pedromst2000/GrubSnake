@@ -10,6 +10,7 @@ class Main:
         eat_sound: game.mixer.Sound,
         game_over_sound: game.mixer.Sound,
         move_sound: game.mixer.Sound,
+        score: int,
     ):
         """
         Initialize the main game class.
@@ -19,6 +20,7 @@ class Main:
         self.eat_sound = eat_sound
         self.game_over_sound = game_over_sound
         self.move_sound = move_sound
+        self.score = score
 
     def update_game(self):
         """
@@ -44,6 +46,8 @@ class Main:
             eat_sound.play()
             self.snake.add_block()
             self.byte.randomize_position(self.snake.body)
+            self.score += 1
+            print(f"Score: {self.score}")
 
     def check_fail(self):
         """
@@ -75,3 +79,5 @@ class Main:
         self.byte.randomize_position(
             self.snake.body
         )  # Ensure byte is visible and not overlapping after reset
+        self.score = 0
+        print("Game Over! Your score was:", self.score)
