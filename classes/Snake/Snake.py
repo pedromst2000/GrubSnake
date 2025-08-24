@@ -19,47 +19,27 @@ class Snake:
         self.direction = Vector2(1, 0)
         self.new_block = False  # To manage the growth of the snake
 
+        def load_sprite(path: str) -> game.Surface:
+            img = game.image.load(path).convert_alpha()
+            return game.transform.smoothscale(img, (CELL_SIZE, CELL_SIZE))
+
         # Loading sprites of the Snake
-        self.head_up = game.image.load("assets/graphics/head_up.png").convert_alpha()
-        self.head_down = game.image.load(
-            "assets/graphics/head_down.png"
-        ).convert_alpha()
-        self.head_left = game.image.load(
-            "assets/graphics/head_left.png"
-        ).convert_alpha()
-        self.head_right = game.image.load(
-            "assets/graphics/head_right.png"
-        ).convert_alpha()
+        self.head_up = load_sprite("assets/graphics/head_up.png")
+        self.head_down = load_sprite("assets/graphics/head_down.png")
+        self.head_left = load_sprite("assets/graphics/head_left.png")
+        self.head_right = load_sprite("assets/graphics/head_right.png")
 
-        self.tail_up = game.image.load("assets/graphics/tail_up.png").convert_alpha()
-        self.tail_down = game.image.load(
-            "assets/graphics/tail_down.png"
-        ).convert_alpha()
-        self.tail_left = game.image.load(
-            "assets/graphics/tail_left.png"
-        ).convert_alpha()
-        self.tail_right = game.image.load(
-            "assets/graphics/tail_right.png"
-        ).convert_alpha()
+        self.tail_up = load_sprite("assets/graphics/tail_up.png")
+        self.tail_down = load_sprite("assets/graphics/tail_down.png")
+        self.tail_left = load_sprite("assets/graphics/tail_left.png")
+        self.tail_right = load_sprite("assets/graphics/tail_right.png")
 
-        self.body_vertical = game.image.load(
-            "assets/graphics/body_vertical.png"
-        ).convert_alpha()
-        self.body_horizontal = game.image.load(
-            "assets/graphics/body_horizontal.png"
-        ).convert_alpha()
-        self.body_tr = game.image.load(
-            "assets/graphics/body_top_right.png"
-        ).convert_alpha()
-        self.body_tl = game.image.load(
-            "assets/graphics/body_top_left.png"
-        ).convert_alpha()
-        self.body_br = game.image.load(
-            "assets/graphics/body_bottom_right.png"
-        ).convert_alpha()
-        self.body_bl = game.image.load(
-            "assets/graphics/body_bottom_left.png"
-        ).convert_alpha()
+        self.body_vertical = load_sprite("assets/graphics/body_vertical.png")
+        self.body_horizontal = load_sprite("assets/graphics/body_horizontal.png")
+        self.body_tr = load_sprite("assets/graphics/body_top_right.png")
+        self.body_tl = load_sprite("assets/graphics/body_top_left.png")
+        self.body_br = load_sprite("assets/graphics/body_bottom_right.png")
+        self.body_bl = load_sprite("assets/graphics/body_bottom_left.png")
 
     def draw_snake(self, screen: game.Surface):
         """

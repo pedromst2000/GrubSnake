@@ -9,7 +9,8 @@ class Byte:
         """
         Initialize the Byte object with its position and image.
         """
-        self.image = game.image.load("assets/graphics/byte.png").convert_alpha()
+        raw_image = game.image.load("assets/graphics/byte.png").convert_alpha()
+        self.image = game.transform.smoothscale(raw_image, (CELL_SIZE, CELL_SIZE)) # scale to grid
         self.pos = Vector2(0, 0)
         self.randomize_position(snake_body)  # Randomize the initial position of the Byte
 
