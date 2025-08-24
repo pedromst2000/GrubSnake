@@ -33,6 +33,9 @@ def main():
     game_over_sound = game.mixer.Sound(Path("assets/sounds/game_over.wav"))
     move_sound = game.mixer.Sound(Path("assets/sounds/snake_rustling.wav"))
 
+    game_over_sound.set_volume(0.6)
+    move_sound.set_volume(0.50)
+
     score = 0
 
     # Game loop
