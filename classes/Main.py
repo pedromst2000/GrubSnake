@@ -2,6 +2,7 @@ import pygame as game
 from utils.settings import CELL_NUMBER_X, CELL_NUMBER_Y
 from classes.Snake.Snake import Snake
 from classes.Byte.Byte import Byte
+from classes.Score.Score import Score
 
 
 class Main:
@@ -10,7 +11,8 @@ class Main:
         eat_sound: game.mixer.Sound,
         game_over_sound: game.mixer.Sound,
         move_sound: game.mixer.Sound,
-        score: int,
+        font: game.font.Font,
+        byte_icon_small: game.Surface,
     ):
         """
         Initialize the main game class.
@@ -20,7 +22,8 @@ class Main:
         self.eat_sound = eat_sound
         self.game_over_sound = game_over_sound
         self.move_sound = move_sound
-        self.score = score
+        self.font = font
+        self.score_HUD = Score(font, byte_icon_small)
 
     def update_game(self):
         """
@@ -36,6 +39,7 @@ class Main:
         """
         self.byte.draw_byte(screen)
         self.snake.draw_snake(screen)
+        self.score_HUD.draw_score(screen, (20, 20))
 
     def check_collision_byte(self, eat_sound: game.mixer.Sound):
         """
@@ -45,9 +49,8 @@ class Main:
         if self.snake.body[0] == self.byte.pos:
             eat_sound.play()
             self.snake.add_block()
+            self.score_HUD.add_score(1)
             self.byte.randomize_position(self.snake.body)
-            self.score += 1
-            print(f"Score: {self.score}")
 
     def check_fail(self):
         """
@@ -75,9 +78,9 @@ class Main:
         Handle game over state.
         """
         self.game_over_sound.play()
+        # self.score_HUD.save_high_score()
         self.snake.reset()
+        self.score_HUD.reset()
         self.byte.randomize_position(
             self.snake.body
         )  # Ensure byte is visible and not overlapping after reset
-        self.score = 0
-        print("Game Over! Your score was:", self.score)

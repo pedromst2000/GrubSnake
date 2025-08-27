@@ -2,6 +2,7 @@ from PIL import Image
 import pygame as game, sys
 from pathlib import Path
 from utils.settings import (
+    CELL_SIZE,
     SCREEN_WIDTH,
     SCREEN_HEIGHT,
     FPS,
@@ -36,11 +37,18 @@ def main():
     game_over_sound.set_volume(0.6)
     move_sound.set_volume(0.50)
 
-    score = 0
+    # HUD SCORE
+    font = game.font.SysFont("Consolas", 18, bold=True)
+    byte_icon_small = game.image.load(Path("assets/graphics/byte.png")).convert_alpha()
+    # Scaling to Fit
+    if byte_icon_small.get_width() != CELL_SIZE:
+        byte_icon_small = game.transform.smoothscale(
+            byte_icon_small, (18, 18)
+        )
 
     # Game loop
     main_game = Main(
-        eat_sound, game_over_sound, move_sound, score
+        eat_sound, game_over_sound, move_sound, font, byte_icon_small
     )  # Initialize the main game class
     game.time.set_timer(
         MOVE_EVENT, MOVE_INTERVAL_MS
