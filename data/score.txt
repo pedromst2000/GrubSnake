@@ -1,2 +1,4 @@
-score
-0
+level;score
+easy;4
+medium;12
+hard;2
