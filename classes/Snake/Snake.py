@@ -1,6 +1,6 @@
 from pygame.math import Vector2  # For the draw of the snake with vectors
 import pygame as game
-from utils.settings import CELL_SIZE
+from utils.settings.settings import CELL_SIZE
 
 
 class Snake:
@@ -15,8 +15,8 @@ class Snake:
 
         Vector2: The position of the snake's head.
         """
-        self.body = [Vector2(5, 5), Vector2(4, 5), Vector2(3, 5)]
-        self.direction = Vector2(1, 0)
+        self.body = [Vector2(5, 5), Vector2(4, 5), Vector2(3, 5)] # body of the snake, starting with 3 segments
+        self.direction = Vector2(1, 0) # the snake starts in the right direction (X axis)
         self.new_block = False  # To manage the growth of the snake
 
         def load_sprite(path: str) -> game.Surface:
@@ -24,22 +24,22 @@ class Snake:
             return game.transform.smoothscale(img, (CELL_SIZE, CELL_SIZE))
 
         # Loading sprites of the Snake
-        self.head_up = load_sprite("assets/graphics/head_up.png")
-        self.head_down = load_sprite("assets/graphics/head_down.png")
-        self.head_left = load_sprite("assets/graphics/head_left.png")
-        self.head_right = load_sprite("assets/graphics/head_right.png")
+        self.head_up = load_sprite("assets/graphics/snake_sprites/head_up.png")
+        self.head_down = load_sprite("assets/graphics/snake_sprites/head_down.png")
+        self.head_left = load_sprite("assets/graphics/snake_sprites/head_left.png")
+        self.head_right = load_sprite("assets/graphics/snake_sprites/head_right.png")
 
-        self.tail_up = load_sprite("assets/graphics/tail_up.png")
-        self.tail_down = load_sprite("assets/graphics/tail_down.png")
-        self.tail_left = load_sprite("assets/graphics/tail_left.png")
-        self.tail_right = load_sprite("assets/graphics/tail_right.png")
+        self.tail_up = load_sprite("assets/graphics/snake_sprites/tail_up.png")
+        self.tail_down = load_sprite("assets/graphics/snake_sprites/tail_down.png")
+        self.tail_left = load_sprite("assets/graphics/snake_sprites/tail_left.png")
+        self.tail_right = load_sprite("assets/graphics/snake_sprites/tail_right.png")
 
-        self.body_vertical = load_sprite("assets/graphics/body_vertical.png")
-        self.body_horizontal = load_sprite("assets/graphics/body_horizontal.png")
-        self.body_tr = load_sprite("assets/graphics/body_top_right.png")
-        self.body_tl = load_sprite("assets/graphics/body_top_left.png")
-        self.body_br = load_sprite("assets/graphics/body_bottom_right.png")
-        self.body_bl = load_sprite("assets/graphics/body_bottom_left.png")
+        self.body_vertical = load_sprite("assets/graphics/snake_sprites/body_vertical.png")
+        self.body_horizontal = load_sprite("assets/graphics/snake_sprites/body_horizontal.png")
+        self.body_tr = load_sprite("assets/graphics/snake_sprites/body_top_right.png")
+        self.body_tl = load_sprite("assets/graphics/snake_sprites/body_top_left.png")
+        self.body_br = load_sprite("assets/graphics/snake_sprites/body_bottom_right.png")
+        self.body_bl = load_sprite("assets/graphics/snake_sprites/body_bottom_left.png")
 
     def draw_snake(self, screen: game.Surface):
         """
@@ -122,9 +122,9 @@ class Snake:
             body_copy = self.body[:]  # Copy the entire body
             self.new_block = False  # Reset the growth flag
 
-        new_head = self.body[0] + self.direction
-        body_copy.insert(0, new_head)
-        self.body = body_copy
+        new_head = self.body[0] + self.direction # Calculate new head position
+        body_copy.insert(0, new_head) # Insert new head into the body
+        self.body = body_copy # Update the snake's body
 
     def add_block(self):
         """
@@ -137,5 +137,5 @@ class Snake:
         Method class for resetting the snake to its initial state.
         """
         self.body = [Vector2(5, 5), Vector2(4, 5), Vector2(3, 5)]
-        self.direction = game.Vector2(1, 0)
+        self.direction = game.Vector2(0, 1)
         self.new_block = False
