@@ -1,14 +1,13 @@
 from PIL import Image
 import pygame as game, sys
 from pathlib import Path
-from utils.settings import (
+from utils.settings.settings import (
     CELL_SIZE,
     SCREEN_WIDTH,
     SCREEN_HEIGHT,
-    FPS,
     MOVE_EVENT,
-    MOVE_INTERVAL_MS,
 )
+from utils.settings.settings import LEVELS
 from classes.Main import Main
 
 
@@ -31,27 +30,29 @@ def main():
 
     # Load assets
     eat_sound = game.mixer.Sound(Path("assets/sounds/eating_byte.wav"))
+    poison_sound = game.mixer.Sound(Path("assets/sounds/eating_poison_v2.wav"))
     game_over_sound = game.mixer.Sound(Path("assets/sounds/game_over.wav"))
     move_sound = game.mixer.Sound(Path("assets/sounds/snake_rustling.wav"))
 
+    poison_sound.set_volume(0.6)
     game_over_sound.set_volume(0.6)
     move_sound.set_volume(0.50)
 
-    # HUD SCORE
+    # HUD SCORE - TO BE REFACTORED WITH A CALLBACK FUNCTION
     font = game.font.SysFont("Consolas", 18, bold=True)
-    byte_icon_small = game.image.load(Path("assets/graphics/byte.png")).convert_alpha()
+    byte_icon_small = game.image.load(
+        Path("assets/graphics/items/byte.png")
+    ).convert_alpha()
     # Scaling to Fit
     if byte_icon_small.get_width() != CELL_SIZE:
-        byte_icon_small = game.transform.smoothscale(
-            byte_icon_small, (18, 18)
-        )
+        byte_icon_small = game.transform.smoothscale(byte_icon_small, (18, 18))
 
     # Game loop
     main_game = Main(
-        eat_sound, game_over_sound, move_sound, font, byte_icon_small
+        eat_sound, poison_sound, game_over_sound, font, byte_icon_small
     )  # Initialize the main game class
     game.time.set_timer(
-        MOVE_EVENT, MOVE_INTERVAL_MS
+        MOVE_EVENT, LEVELS[main_game.level]["move_interval"]
     )  # Set the timer for snake movement
     clock = game.time.Clock()  # Create a clock object to manage the frame rate
 
@@ -91,8 +92,8 @@ def main():
         main_game.update_game()
         main_game.draw_elements(screen)
 
-        game.display.flip()
-        clock.tick(FPS)
+        game.display.flip()  # Update the display
+        clock.tick(LEVELS[main_game.level]["fps"])
 
     game.quit()  # Quit the game
     sys.exit()  # Exit the program

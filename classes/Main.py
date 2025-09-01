@@ -1,7 +1,7 @@
 import pygame as game
-from utils.settings import CELL_NUMBER_X, CELL_NUMBER_Y
+from utils.settings.settings import CELL_NUMBER_X, CELL_NUMBER_Y
 from classes.Snake.Snake import Snake
-from classes.Byte.Byte import Byte
+from classes.Byte.Item import Item
 from classes.Score.Score import Score
 
 
@@ -9,8 +9,8 @@ class Main:
     def __init__(
         self,
         eat_sound: game.mixer.Sound,
+        poison_sound: game.mixer.Sound,
         game_over_sound: game.mixer.Sound,
-        move_sound: game.mixer.Sound,
         font: game.font.Font,
         byte_icon_small: game.Surface,
     ):
@@ -18,30 +18,40 @@ class Main:
         Initialize the main game class.
         """
         self.snake = Snake()
-        self.byte = Byte(self.snake.body)
+        self.level = "hard" # hardcoded
+        self.byte = Item(self.snake.body, "assets/graphics/items/byte.png")
+        self.poison = (
+            Item(self.snake.body, "assets/graphics/items/poison.png")
+            if self.level == "hard"
+            else None
+        )
         self.eat_sound = eat_sound
+        self.poison_sound = poison_sound
         self.game_over_sound = game_over_sound
-        self.move_sound = move_sound
         self.font = font
-        self.score_HUD = Score(font, byte_icon_small)
+        self.score_HUD = Score(font, byte_icon_small, self.level)
 
     def update_game(self):
         """
         Update the snake's position and state.
         """
         self.snake.move()
-        self.check_collision_byte(self.eat_sound)
+        self.check_collision_item(self.eat_sound, self.poison_sound)
         self.check_fail()
 
     def draw_elements(self, screen: game.Surface):
         """
         Draw the snake and byte on the given screen.
         """
-        self.byte.draw_byte(screen)
+        self.byte.draw(screen)
+        if (
+            self.poison
+        ):  # will draw the poison item if it exists (only available in hard mode)
+            self.poison.draw(screen)
         self.snake.draw_snake(screen)
         self.score_HUD.draw_score(screen, (20, 20))
 
-    def check_collision_byte(self, eat_sound: game.mixer.Sound):
+    def check_collision_item(self, eat_sound: game.mixer.Sound, poison_sound: game.mixer.Sound):
         """
         Check for collisions with the byte.
         """
@@ -51,6 +61,13 @@ class Main:
             self.snake.add_block()
             self.score_HUD.add_score(1)
             self.byte.randomize_position(self.snake.body)
+            if self.poison:
+                self.poison.randomize_position(self.snake.body)
+        elif self.poison and self.snake.body[0] == self.poison.pos:
+            poison_sound.play()
+            self.score_HUD.add_score(-1)
+            self.byte.randomize_position(self.snake.body)
+            self.poison.randomize_position(self.snake.body)
 
     def check_fail(self):
         """
@@ -72,6 +89,10 @@ class Main:
         # Self collision
         if head in self.snake.body[1:]:
             self.game_over()
+
+        # # Collide with poison
+        # elif self.poison and head == self.poison.pos:
+        #     self.game_over()
 
     def game_over(self):
         """
