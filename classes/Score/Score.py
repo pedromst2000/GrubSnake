@@ -7,7 +7,9 @@ class Score:
     Class to manage the score and high score display.
     """
 
-    def __init__(self, font: game.font.Font, byte_icon: game.Surface) -> None:
+    def __init__(
+        self, font: game.font.Font, byte_icon: game.Surface, level: str
+    ) -> None:
         """
         Constructor for the Score class.
 
@@ -16,6 +18,7 @@ class Score:
 
         self.score = 0
         self.font = font
+        self.level = level
 
         # --- Trim transparent padding from the icon so centering uses visible pixels
         self.byte_icon = byte_icon.convert_alpha()
@@ -93,25 +96,32 @@ class Score:
 
     def load_high_score(self) -> int:
         """
-        Load the high score from a file.
+        Load the high score for the current level from a file.
         Returns the high score as an integer.
         """
 
         # If file does not exist, create it with default structure
         if not os.path.exists(self.file_path):
-            with open(self.file_path, "w", encoding="utf-8") as f:  # create file if not exists
-                f.write("score\n0\n")  # write default high score value as 0
+            with open(self.file_path, "w", encoding="utf-8") as f:
+                f.write(
+                    f"{self.level};0\n"
+                )  # write default high score for current level
             return 0
 
         with open(self.file_path, "r", encoding="utf-8") as f:
             lines = f.readlines()
 
-        # Must have at least 2 lines: "score" and value
-        if len(lines) >= 2:
-            try:
-                return int(lines[1].strip())  # strip for whitespace
-            except ValueError:
-                return 0
+        # Search for the current level in the file
+        for line in lines:
+            parts = line.strip().split(";")
+            if len(parts) == 2 and parts[0] == self.level:
+                try:
+                    return int(parts[1])
+                except ValueError:
+                    return 0
+        # If not found, add entry for current level
+        with open(self.file_path, "a", encoding="utf-8") as f:
+            f.write(f"{self.level};0\n")
         return 0
 
     def save_high_score(self) -> None:
@@ -119,7 +129,18 @@ class Score:
         Save the high score to a file.
         """
 
+        scores = {}  # To store existing scores
+        if os.path.exists(self.file_path):  # if the file exists
+            with open(self.file_path, "r", encoding="utf-8") as f:
+                for line in f:
+                    parts = line.strip().split(";")  # Split line into parts
+                    if len(parts) == 2:  # Check if line is valid
+                        scores[parts[0]] = parts[1]  # Store score for each level => level;score
+
+        # Update the score for the current level
+        scores[self.level] = str(self.high_score)
+
+        # Write all scores back in "level;score" format
         with open(self.file_path, "w", encoding="utf-8") as f:
-            f.write("score\n")
-            f.write(f"{self.high_score}")
-    
+            for lvl, score in scores.items():
+                f.write(f"{lvl};{score}\n")
