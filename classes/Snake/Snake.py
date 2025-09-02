@@ -1,6 +1,6 @@
 from pygame.math import Vector2  # For the draw of the snake with vectors
 import pygame as game
-from utils.settings.settings import CELL_SIZE
+from settings.settings import CELL_SIZE
 
 
 class Snake:

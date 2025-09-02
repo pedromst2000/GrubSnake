@@ -1,7 +1,7 @@
 import pygame as game
 from pygame import Vector2
 import random
-from utils.settings.settings import CELL_SIZE, CELL_NUMBER_X, CELL_NUMBER_Y
+from settings.settings import CELL_SIZE, CELL_NUMBER_X, CELL_NUMBER_Y
 
 
 class Item:

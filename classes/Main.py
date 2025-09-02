@@ -1,5 +1,5 @@
 import pygame as game
-from utils.settings.settings import CELL_NUMBER_X, CELL_NUMBER_Y
+from settings.settings import CELL_NUMBER_X, CELL_NUMBER_Y
 from classes.Snake.Snake import Snake
 from classes.Byte.Item import Item
 from classes.Score.Score import Score
@@ -18,7 +18,7 @@ class Main:
         Initialize the main game class.
         """
         self.snake = Snake()
-        self.level = "hard" # hardcoded
+        self.level = "hard"  # hardcoded
         self.byte = Item(self.snake.body, "assets/graphics/items/byte.png")
         self.poison = (
             Item(self.snake.body, "assets/graphics/items/poison.png")
@@ -51,7 +51,9 @@ class Main:
         self.snake.draw_snake(screen)
         self.score_HUD.draw_score(screen, (20, 20))
 
-    def check_collision_item(self, eat_sound: game.mixer.Sound, poison_sound: game.mixer.Sound):
+    def check_collision_item(
+        self, eat_sound: game.mixer.Sound, poison_sound: game.mixer.Sound
+    ):
         """
         Check for collisions with the byte.
         """
