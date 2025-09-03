@@ -1,13 +1,14 @@
 from PIL import Image
 import pygame as game, sys
 from pathlib import Path
-from utils.settings.settings import (
+from settings.settings import (
     CELL_SIZE,
     SCREEN_WIDTH,
     SCREEN_HEIGHT,
     MOVE_EVENT,
 )
-from utils.settings.settings import LEVELS
+from settings.settings import LEVELS
+from settings.icon import render_icon
 from classes.Main import Main
 
 
@@ -17,20 +18,16 @@ def main():
     screen = game.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     game.display.set_caption("BitSnake")
 
-    background_grass = game.image.load(Path("assets/background.png")).convert()
+    background_grass = game.image.load(Path("assets/background_game.png")).convert()
     background_grass = game.transform.scale(
         background_grass, (SCREEN_WIDTH, SCREEN_HEIGHT)
     )  # to adjust the window size
 
-    # Icon Setting
-    ico_path = Path("assets/Icon.ico")
-    pill_image = Image.open(Path(ico_path)).convert("RGBA")  # convert to alpha channel
-    icon = game.image.fromstring(pill_image.tobytes(), pill_image.size, "RGBA")
-    game.display.set_icon(icon)
+    render_icon(icon_path="assets/Icon.ico", Image=Image)
 
     # Load assets
     eat_sound = game.mixer.Sound(Path("assets/sounds/eating_byte.wav"))
-    poison_sound = game.mixer.Sound(Path("assets/sounds/eating_poison_v2.wav"))
+    poison_sound = game.mixer.Sound(Path("assets/sounds/eating_poison.wav"))
     game_over_sound = game.mixer.Sound(Path("assets/sounds/game_over.wav"))
     move_sound = game.mixer.Sound(Path("assets/sounds/snake_rustling.wav"))
 
@@ -56,6 +53,7 @@ def main():
     )  # Set the timer for snake movement
     clock = game.time.Clock()  # Create a clock object to manage the frame rate
 
+    # TODO - INSERT THE MAIN MENU LOGIC HERE
     running = True
     while running:
         for event in game.event.get():
