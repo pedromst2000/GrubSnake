@@ -17,7 +17,9 @@ SOUNDS = {
     },
 }
 
-SOUNDS["menu"]["music"].set_volume(0.1)
+SOUNDS["menu"]["music"].set_volume(0.01)
 SOUNDS["game"]["eat_poison"].set_volume(0.6)
 SOUNDS["game"]["game_over"].set_volume(0.6)
 SOUNDS["game"]["move_snake"].set_volume(0.50)
+SOUNDS["menu"]["select"].set_volume(0.5)
+SOUNDS["menu"]["click"].set_volume(0.5)

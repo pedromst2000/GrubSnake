@@ -5,6 +5,11 @@ from settings.settings import CELL_SIZE, CELL_NUMBER_X, CELL_NUMBER_Y
 
 
 class Item:
+    """
+    Class to represent a collectible or obstacle in the game.
+
+    """
+
     def __init__(self, snake_body: list[Vector2], image_path: str):
         """
         Item to represent a collectible or obstacle in the game.
