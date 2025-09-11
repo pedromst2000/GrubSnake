@@ -8,6 +8,8 @@ from renderers.buttons import render_buttons
 from gui.Button.Button import Button
 from screens.Instructions import instructions_screen
 from screens.LevelOpt import level_options_screen
+from events.keyboard import handle_keydown_navigation
+from events.mouse import handle_mouse_navigation
 
 
 def main_menu_screen(SCREEN: game.Surface) -> None:
@@ -45,7 +47,7 @@ def main_menu_screen(SCREEN: game.Surface) -> None:
 
     # Initialize selected index if it doesn't exist
     if not hasattr(main_menu_screen, "selected_idx"):
-        main_menu_screen.selected_idx = 0
+        main_menu_screen.selected_idx = 0  # Default to the first button
 
     SOUNDS["menu"]["music"].play(loops=-1)
 
@@ -86,40 +88,23 @@ def main_menu_screen(SCREEN: game.Surface) -> None:
                 sys.exit()
 
             # Keyboard navigation
-            if event.type == game.KEYDOWN:
-                SOUNDS["menu"]["select"].play()  # Selection sound
-                if event.key == game.K_DOWN:
-                    main_menu_screen.selected_idx = (
-                        main_menu_screen.selected_idx + 1
-                    ) % len(BUTTONS)
-                elif event.key == game.K_UP:
-                    main_menu_screen.selected_idx = (
-                        main_menu_screen.selected_idx - 1
-                    ) % len(BUTTONS)
-                elif event.key in (game.K_RETURN, game.K_KP_ENTER, game.K_SPACE):
-                    selected_button = BUTTONS[main_menu_screen.selected_idx]
-                    if selected_button.check_for_input(selected=True):
-                        SOUNDS["menu"]["click"].play()  # Click sound
-                        if selected_button.text_str == "PLAY":
-                            level_options_screen()
-                        elif selected_button.text_str == "INSTRUCTIONS":
-                            instructions_screen()
-                        elif selected_button.text_str == "EXIT":
-                            game.quit()
-                            sys.exit()
+            if event.type == game.KEYDOWN:  # key press handling from keyboard
+                main_menu_screen.selected_idx = handle_keydown_navigation(
+                    event=event,
+                    selected_idx=main_menu_screen.selected_idx,
+                    num_buttons=len(BUTTONS),
+                    buttons=BUTTONS,
+                    screens=[level_options_screen, instructions_screen],
+                )
 
-            # Mouse click handling
+            # Mouse navigation
             if event.type == game.MOUSEBUTTONDOWN:
-                SOUNDS["menu"]["click"].play()  # Click sound
-                for idx, button in enumerate(BUTTONS):
-                    if button.check_for_input(position=MENU_MOUSE_POS):
-                        main_menu_screen.selected_idx = idx
-                        if button.text_str == "PLAY":
-                            level_options_screen()
-                        elif button.text_str == "INSTRUCTIONS":
-                            instructions_screen()
-                        elif button.text_str == "EXIT":
-                            game.quit()
-                            sys.exit()
+                handle_mouse_navigation(
+                    event=event,
+                    selected_idx=main_menu_screen.selected_idx,
+                    buttons=BUTTONS,
+                    screens=[level_options_screen, instructions_screen],
+                    mouse_pos=MENU_MOUSE_POS,
+                )
 
         game.display.update()

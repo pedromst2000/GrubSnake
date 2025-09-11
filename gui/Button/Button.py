@@ -50,7 +50,7 @@ class Button:
 
     def update(self, screen: game.Surface) -> None:
         """
-        Draws the button and its text on the screen.
+        Method that draws the button and its text on the screen.
 
         Args:
             screen (game.Surface): The surface to draw the button on.
@@ -63,7 +63,7 @@ class Button:
 
     def change_cursor(self, state: bool, hovering_sound: game.mixer.Sound) -> None:
         """
-        Changes the cursor state to indicate interactivity.
+        Method that changes the cursor state to indicate interactivity.
 
         Args:
             state (bool): True to change cursor to hand, False for default.
@@ -86,7 +86,7 @@ class Button:
         self, position: tuple[int, int] | None = None, selected: bool = False
     ) -> bool:
         """
-        Checks if button is activated (mouse click or keyboard selection).
+        Method that checks if button is activated (mouse click or keyboard selection).
 
         Args:
             position (tuple[int, int] | None): Mouse position (or None when using keyboard).
@@ -102,11 +102,14 @@ class Button:
 
     def change_state(self, position: tuple[int, int], selected: bool = False) -> None:
         """
-        Updates button state (hover image + text color).
+        Method that updates button state (hover image + text color).
 
         Args:
             position (tuple[int, int]): The mouse position.
             selected (bool): True if selected via keyboard (Arrow Up/Down).
+
+        Returns:
+            None
         """
         hovered = self.rect.collidepoint(position)  # Check if mouse is over button
 
