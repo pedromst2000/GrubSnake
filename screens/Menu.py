@@ -7,7 +7,7 @@ from renderers.sounds import SOUNDS
 from renderers.buttons import render_buttons
 from gui.Button.Button import Button
 from screens.Instructions import instructions_screen
-from screens.LevelOpt import level_options_screen
+from screens.LevelOpt import level_opt_screen
 from events.keyboard import handle_keydown_navigation
 from events.mouse import handle_mouse_navigation
 
@@ -94,7 +94,7 @@ def main_menu_screen(SCREEN: game.Surface) -> None:
                     selected_idx=main_menu_screen.selected_idx,
                     num_buttons=len(BUTTONS),
                     buttons=BUTTONS,
-                    screens=[level_options_screen, instructions_screen],
+                    screens=[level_opt_screen, instructions_screen],
                     SCREEN=SCREEN,
                 )
 
@@ -104,7 +104,7 @@ def main_menu_screen(SCREEN: game.Surface) -> None:
                     event=event,
                     selected_idx=main_menu_screen.selected_idx,
                     buttons=BUTTONS,
-                    screens=[level_options_screen, instructions_screen],
+                    screens=[level_opt_screen, instructions_screen],
                     mouse_pos=MENU_MOUSE_POS,
                     SCREEN=SCREEN,
                 )
