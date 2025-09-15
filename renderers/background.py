@@ -5,7 +5,7 @@ from settings.settings import SCREEN_WIDTH, SCREEN_HEIGHT
 
 def render_background(path: str) -> game.Surface:
     """
-    Renders the background for the main menu.
+    Renders the background for the screen.
 
     Args:
         path (str): The file path to the background image.
