@@ -11,7 +11,6 @@ def handle_keydown_navigation(
     buttons: list[Button],
     screens: list[callable] = None,
     SCREEN: game.Surface = None,
-    selected_nvl: str = None,
 ) -> int:
     """
     Handles keydown events for menu navigation (up/down arrows and enter/space key).
@@ -23,7 +22,6 @@ def handle_keydown_navigation(
         buttons (list[Button]): The list of Button objects.
         screens (list[callable] | None): A list of screen functions corresponding to the buttons.
         SCREEN (game.Surface | None): The main display surface where the screens will be rendered.
-        selected_nvl (str | None): The selected level (e.g., "easy", "medium", "hard").
 
     Returns:
         int: The updated selected button index.
@@ -47,6 +45,7 @@ def handle_keydown_navigation(
         selected_btn = buttons[selected_idx]  # Get the currently selected button
         if selected_btn.check_for_input(selected=True):  # Confirm selection
             SOUNDS["menu"]["click"].play()  # Click sound
+            selected_nvl = selected_btn.text_str.lower()
 
             if screens and SCREEN is not None:
                 if selected_btn.text_str == "PLAY":
