@@ -47,7 +47,7 @@ def main_menu_screen(SCREEN: game.Surface) -> None:
 
     # Initialize selected index if it doesn't exist
     if not hasattr(main_menu_screen, "selected_idx"):
-        main_menu_screen.selected_idx = 0  # Default to the first button
+        main_menu_screen.selected_idx = 0  # Default to the first button / To manage the state of the selected button
 
     SOUNDS["menu"]["music"].play(loops=-1)
 
@@ -95,16 +95,18 @@ def main_menu_screen(SCREEN: game.Surface) -> None:
                     num_buttons=len(BUTTONS),
                     buttons=BUTTONS,
                     screens=[level_options_screen, instructions_screen],
+                    SCREEN=SCREEN,
                 )
 
             # Mouse navigation
             if event.type == game.MOUSEBUTTONDOWN:
-                handle_mouse_navigation(
+                main_menu_screen.selected_idx = handle_mouse_navigation(
                     event=event,
                     selected_idx=main_menu_screen.selected_idx,
                     buttons=BUTTONS,
                     screens=[level_options_screen, instructions_screen],
                     mouse_pos=MENU_MOUSE_POS,
+                    SCREEN=SCREEN,
                 )
 
         game.display.update()
