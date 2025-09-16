@@ -25,17 +25,19 @@ def handle_mouse_navigation(
     Returns:
         int: The updated selected button index.
     """
-    SOUNDS["menu"]["click"].play()  # Click sound
     for idx, button in enumerate(
         buttons
     ):  # Iterate through buttons to check each button it´s being clicked or selected
         if button.check_for_input(position=mouse_pos):
             selected_idx = idx
             selected_nvl = button.text_str.lower()  # Update selected level
+            SOUNDS["menu"]["click"].play()  # Click sound
 
             if screens and SCREEN is not None:  # Only proceed if screens are provided
                 if button.text_str == "PLAY":
-                    screens[0](SCREEN)  # Calling the function directly from the list of screens
+                    screens[0](
+                        SCREEN
+                    )  # Calling the function directly from the list of screens
                 elif button.text_str == "INSTRUCTIONS":
                     screens[1](SCREEN)
                 elif button.text_str in ["EASY", "MEDIUM", "HARD"]:
