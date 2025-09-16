@@ -1,6 +1,7 @@
 import pygame as game
 from pathlib import Path
 from renderers.text import render_text
+from animations.easing import ease_in_out
 
 
 class Button:
@@ -47,6 +48,8 @@ class Button:
         )  # Center text
 
         self.cursor_state = False  # To manage cursor state
+        self.animator = None  # To hold animation generator
+        self.target_image = self.image  # Target image for animation
 
     def update(self, screen: game.Surface) -> None:
         """
@@ -58,8 +61,14 @@ class Button:
         Returns:
             None
         """
-        screen.blit(self.image, self.rect)  # Draw button image
-        screen.blit(self.text_surface, self.text_rect)  # Draw button text
+        if self.animator:  # If animation is running
+            try:
+                self.image = next(self.animator)
+            except StopIteration:
+                self.animator = None
+
+        screen.blit(self.image, self.rect)
+        screen.blit(self.text_surface, self.text_rect)
 
     def change_cursor(self, state: bool, hovering_sound: game.mixer.Sound) -> None:
         """
@@ -100,37 +109,35 @@ class Button:
             return True
         return False
 
-    def change_state(self, position: tuple[int, int], selected: bool = False) -> None:
+    def change_state(
+        self, position: tuple[int, int], selected: bool = False, duration: int = 550
+    ) -> None:
         """
-        Method that updates button state (hover image + text color).
+        Method that updates button state (hover image + text color) with ease-in-out animation.
 
         Args:
             position (tuple[int, int]): The mouse position.
             selected (bool): True if selected via keyboard (Arrow Up/Down).
+            duration (int): Animation duration in milliseconds.
 
         Returns:
             None
         """
-        hovered = self.rect.collidepoint(position)  # Check if mouse is over button
+        hovered = self.rect.collidepoint(position)
+        target_image = (
+            self.selected_image if (selected or hovered) else self.default_image
+        )
+        target_color = self.hovering_color if (selected or hovered) else self.base_color
 
-        if selected or hovered:  # If selected via keyboard or hovered via mouse
-            if self.image != self.selected_image:
-                self.image = self.selected_image
-                self.text_surface = render_text(
-                    text=self.text_str,
-                    color=self.hovering_color,
-                    type="input",
-                    return_surface=True,
-                )
-        else:  # If not hovered or selected
-            if self.image != self.default_image:
-                self.image = self.default_image
-                self.text_surface = render_text(
-                    text=self.text_str,
-                    color=self.base_color,
-                    type="input",
-                    return_surface=True,
-                )
+        if self.target_image != target_image:  # State change
+            self.target_image = target_image
+            self.animator = ease_in_out(self.image, self.target_image, duration)
 
-        # Keep text centered on button
+        # Always update text color
+        self.text_surface = render_text(
+            text=self.text_str,
+            color=target_color,
+            type="input",
+            return_surface=True,
+        )
         self.text_rect = self.text_surface.get_rect(center=self.rect.center)
