@@ -16,7 +16,7 @@ def main_menu_screen(SCREEN: game.Surface) -> None:
     """
     Displays the main menu screen of the game.
     """
-    BG = render_background(Path("assets/menu/background_menu.png"))
+    BG = render_background(Path("assets/backgrounds/main_menu_bg.png"))
 
     BUTTONS = [
         Button(

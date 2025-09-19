@@ -1,14 +1,15 @@
 import pygame as game
 import sys
 from pathlib import Path
+from renderers.sounds import SOUNDS
 from renderers.background import render_background
 from renderers.text import render_text
-from renderers.sounds import SOUNDS
 from renderers.buttons import render_buttons
 from gui.Button.Button import Button
 from events.keyboard import handle_keydown_navigation
 from events.mouse import handle_mouse_navigation
 from screens.gameplay import gameplay_screen
+from animations.fading import fade_in
 
 
 def level_opt_screen(SCREEN: game.Surface) -> None:
@@ -16,9 +17,7 @@ def level_opt_screen(SCREEN: game.Surface) -> None:
     Displays the level options screen where the player can choose the difficulty level.
     """
 
-    # TODO: TO CHANGE THE BACKGROUND IMAGE TO SOMETHING MORE CREATIVE
-
-    BG = render_background(Path("assets/menu/background_menu.png"))
+    BG = render_background(Path("assets/backgrounds/level_opt_bg.png"))
 
     BUTTONS = [
         Button(
@@ -51,28 +50,32 @@ def level_opt_screen(SCREEN: game.Surface) -> None:
     if not hasattr(level_opt_screen, "selected_idx"):
         level_opt_screen.selected_idx = 0  # Default to the first button / To manage the state of the selected button
 
-    SOUNDS["menu"]["music"].play(loops=-1)
+        # TODO : REFACTOR THIS CODE TO INCLUDE THE RENDER UI ELEMENTS WITH A FUNCTION HELPER
+
+        def render_level_options() -> None:
+            """Helper function to draw the entire level options screen."""
+            SCREEN.blit(BG, (0, 0))
+
+            render_text(
+                text="Choose the Level to Play",
+                color="#6FC96A",
+                SCREEN=SCREEN,
+                type="label",
+                effect="none",
+            )
+
+            render_buttons(
+                buttons=BUTTONS,
+                screen=SCREEN,
+                menu_mouse_pos=game.mouse.get_pos(),
+                selected_idx=level_opt_screen.selected_idx,
+                hovering_sound=SOUNDS["menu"]["select"],
+            )
+
+        fade_in(SCREEN, render_level_options, duration=550)
 
     while True:
-        SCREEN.blit(BG, (0, 0))
-        LEVEL_OPT_MOUSE_POS = game.mouse.get_pos()
-
-        render_text(
-            text="Choose the Level to Play",
-            color="#6FC96A",
-            SCREEN=SCREEN,
-            type="label",
-            effect="none",
-        )
-
-        # Render buttons
-        render_buttons(
-            buttons=BUTTONS,
-            screen=SCREEN,
-            menu_mouse_pos=LEVEL_OPT_MOUSE_POS,
-            selected_idx=level_opt_screen.selected_idx,
-            hovering_sound=SOUNDS["menu"]["select"],
-        )
+        render_level_options()
 
         # Event handling
         for event in game.event.get():
@@ -98,7 +101,7 @@ def level_opt_screen(SCREEN: game.Surface) -> None:
                     selected_idx=level_opt_screen.selected_idx,
                     buttons=BUTTONS,
                     screens=[gameplay_screen],
-                    mouse_pos=LEVEL_OPT_MOUSE_POS,
+                    mouse_pos=game.mouse.get_pos(),
                     SCREEN=SCREEN,
                 )
 

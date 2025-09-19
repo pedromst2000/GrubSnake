@@ -6,7 +6,7 @@ from screens.Menu import main_menu_screen
 
 game.init()
 SCREEN = game.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-game.display.set_caption("BitSnake")
+game.display.set_caption("GrubSnake")
 render_icon(icon_path="assets/Icon.ico", Image=Image)
 
 

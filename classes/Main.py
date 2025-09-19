@@ -1,7 +1,7 @@
 import pygame as game
 from settings.settings import CELL_NUMBER_X, CELL_NUMBER_Y
 from classes.Snake.Snake import Snake
-from classes.Byte.Item import Item
+from classes.Item.Item import Item
 from classes.Score.Score import Score
 
 
@@ -12,14 +12,14 @@ class Main:
         poison_sound: game.mixer.Sound,
         game_over_sound: game.mixer.Sound,
         font: game.font.Font,
-        byte_icon_small: game.Surface,
+        apple_icon_small: game.Surface,
     ):
         """
         Initialize the main game class.
         """
         self.snake = Snake()
         self.level = "hard"  # hardcoded
-        self.byte = Item(self.snake.body, "assets/graphics/items/byte.png")
+        self.apple = Item(self.snake.body, "assets/graphics/items/apple.png")
         self.poison = (
             Item(self.snake.body, "assets/graphics/items/poison.png")
             if self.level == "hard"
@@ -29,7 +29,7 @@ class Main:
         self.poison_sound = poison_sound
         self.game_over_sound = game_over_sound
         self.font = font
-        self.score_HUD = Score(font, byte_icon_small, self.level)
+        self.score_HUD = Score(font, apple_icon_small, self.level)
 
     def update_game(self):
         """
@@ -41,9 +41,9 @@ class Main:
 
     def draw_elements(self, screen: game.Surface):
         """
-        Draw the snake and byte on the given screen.
+        Draw the snake and apple on the given screen.
         """
-        self.byte.draw(screen)
+        self.apple.draw(screen)
         if (
             self.poison
         ):  # will draw the poison item if it exists (only available in hard mode)
@@ -55,20 +55,20 @@ class Main:
         self, eat_sound: game.mixer.Sound, poison_sound: game.mixer.Sound
     ):
         """
-        Check for collisions with the byte.
+        Check for collisions with the apple.
         """
 
-        if self.snake.body[0] == self.byte.pos:
+        if self.snake.body[0] == self.apple.pos:
             eat_sound.play()
             self.snake.add_block()
             self.score_HUD.add_score(1)
-            self.byte.randomize_position(self.snake.body)
+            self.apple.randomize_position(self.snake.body)
             if self.poison:
                 self.poison.randomize_position(self.snake.body)
         elif self.poison and self.snake.body[0] == self.poison.pos:
             poison_sound.play()
             self.score_HUD.add_score(-1)
-            self.byte.randomize_position(self.snake.body)
+            self.apple.randomize_position(self.snake.body)
             self.poison.randomize_position(self.snake.body)
 
     def check_fail(self):
@@ -104,6 +104,6 @@ class Main:
         # self.score_HUD.save_high_score()
         self.snake.reset()
         self.score_HUD.reset()
-        self.byte.randomize_position(
+        self.apple.randomize_position(
             self.snake.body
-        )  # Ensure byte is visible and not overlapping after reset
+        )  # Ensure apple is visible and not overlapping after reset
