@@ -1,15 +1,15 @@
-[MIT-license-url]: https://github.com/pedromst2000/BitSnake/blob/master/LICENSE
+[MIT-license-url]: https://github.com/pedromst2000/GrubSnake/blob/master/LICENSE
 [MIT-shield]: https://img.shields.io/badge/License-MIT-green.svg
-[Contributors]: https://github.com/pedromst2000/BitSnake/graphs/contributors
+[Contributors]: https://github.com/pedromst2000/GrubSnake/graphs/contributors
 [Contributors-shield]: https://img.shields.io/badge/Contributors-1-orange.svg
-[Stars]: https://github.com/pedromst2000/BitSnake/stargazers
-[Stars-shield]: https://img.shields.io/github/stars/pedromst2000/BitSnake?style=flat-square
-[Forks]: https://github.com/pedromst2000/BitSnake/network/members
-[Forks-shield]: https://img.shields.io/github/forks/pedromst2000/BitSnake?style=flat-square
+[Stars]: https://github.com/pedromst2000/GrubSnake/stargazers
+[Stars-shield]: https://img.shields.io/github/stars/pedromst2000/GrubSnake?style=flat-square
+[Forks]: https://github.com/pedromst2000/GrubSnake/network/members
+[Forks-shield]: https://img.shields.io/github/forks/pedromst2000/GrubSnake?style=flat-square
 [pygame]: https://www.pygame.org/
 [pygame-shield]: https://img.shields.io/badge/Pygame-2.0.1-darkgreen.svg
 
-# BitSnake
+# GrubSnake
 
 [![MIT License][MIT-shield]][MIT-license-url]
 [![Contributors][Contributors-shield]][Contributors]
@@ -17,4 +17,4 @@
 [![Forks][Forks-shield]][Forks]
 [![Pygame][pygame-shield]][pygame]
 
-Bitsnake is a retro inspired arcade game built with Pygame, bringing a fast-paced and stylish reimagining of the classic Snake experience. Dodge your own tail, collect digital bytes and achieve your own high score in this neon-lit world!
+GrubSnake is a retro-inspired arcade game built with Pygame, offering a fresh and colorful take on the classic Snake experience. Guide your snake through grassy fields, collect apples to grow longer, and avoid poisonous items that reduce your score. Simple to play but challenging to master — chase your high score in this nostalgic pixel-art world!
