@@ -3,9 +3,9 @@
 [Contributors]: https://github.com/pedromst2000/GrubSnake/graphs/contributors
 [Contributors-shield]: https://img.shields.io/badge/Contributors-1-orange.svg
 [Stars]: https://github.com/pedromst2000/GrubSnake/stargazers
-[Stars-shield]: https://img.shields.io/github/stars/pedromst2000/GrubSnake?style=flat-square
+[Stars-shield]: https://img.shields.io/badge/Stars-1-yellow.svg
 [Forks]: https://github.com/pedromst2000/GrubSnake/network/members
-[Forks-shield]: https://img.shields.io/github/forks/pedromst2000/GrubSnake?style=flat-square
+[Forks-shield]: https://img.shields.io/badge/Forks-1-blue.svg
 [pygame]: https://www.pygame.org/
 [pygame-shield]: https://img.shields.io/badge/Pygame-2.0.1-darkgreen.svg
 
