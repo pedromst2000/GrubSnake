@@ -27,7 +27,7 @@ def render_text(
         game.Surface | None
     """
 
-    font_size = 60 if type == "title" else 15 if type == "input" else 13
+    font_size = 60 if type == "title" else 20 if type == "input" else 13
     FONT = render_font(size=font_size)
 
     # Always render a surface

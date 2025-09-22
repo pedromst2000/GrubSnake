@@ -23,26 +23,14 @@ def level_opt_screen(SCREEN: game.Surface) -> None:
         Button(
             pos=(SCREEN.get_width() / 2, 250),
             text="EASY",
-            base_color="#D3E2D2",
-            hovering_color="White",
-            default_img_path=Path("assets/menu/buttons_rect/button_default.png"),
-            selected_img_path=Path("assets/menu/buttons_rect/button_selected.png"),
         ),
         Button(
             pos=(SCREEN.get_width() / 2, 350),
             text="MEDIUM",
-            base_color="#D3E2D2",
-            hovering_color="White",
-            default_img_path=Path("assets/menu/buttons_rect/button_default.png"),
-            selected_img_path=Path("assets/menu/buttons_rect/button_selected.png"),
         ),
         Button(
             pos=(SCREEN.get_width() / 2, 450),
             text="HARD",
-            base_color="#D3E2D2",
-            hovering_color="White",
-            default_img_path=Path("assets/menu/buttons_rect/button_default.png"),
-            selected_img_path=Path("assets/menu/buttons_rect/button_selected.png"),
         ),
     ]
 
@@ -57,10 +45,10 @@ def level_opt_screen(SCREEN: game.Surface) -> None:
             SCREEN.blit(BG, (0, 0))
 
             render_text(
-                text="Choose the Level to Play",
-                color="#6FC96A",
+                text="CHOOSE THE LEVEL TO PLAY",
+                color="#007b2f",
                 SCREEN=SCREEN,
-                type="label",
+                type="input",
                 effect="none",
             )
 

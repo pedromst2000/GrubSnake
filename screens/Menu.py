@@ -18,30 +18,20 @@ def main_menu_screen(SCREEN: game.Surface) -> None:
     """
     BG = render_background(Path("assets/backgrounds/main_menu_bg.png"))
 
+    # TODO: TO ADD RENDER LAYOUT FOR CENTERING ELEMENTS ON THE SCREEN WITH A LAYOUT MANAGER FUNCTION - REFACTOR CODE
+
     BUTTONS = [
         Button(
             pos=(SCREEN.get_width() / 2, 250),
             text="PLAY",
-            base_color="#D3E2D2",
-            hovering_color="White",
-            default_img_path=Path("assets/menu/buttons_rect/button_default.png"),
-            selected_img_path=Path("assets/menu/buttons_rect/button_selected.png"),
         ),
         Button(
             pos=(SCREEN.get_width() / 2, 350),
             text="INSTRUCTIONS",
-            base_color="#D3E2D2",
-            hovering_color="White",
-            default_img_path=Path("assets/menu/buttons_rect/button_default.png"),
-            selected_img_path=Path("assets/menu/buttons_rect/button_selected.png"),
         ),
         Button(
             pos=(SCREEN.get_width() / 2, 450),
             text="EXIT",
-            base_color="#D3E2D2",
-            hovering_color="White",
-            default_img_path=Path("assets/menu/buttons_rect/button_default.png"),
-            selected_img_path=Path("assets/menu/buttons_rect/button_selected.png"),
         ),
     ]
 

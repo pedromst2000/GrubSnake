@@ -13,12 +13,28 @@ class Button:
         self,
         pos: tuple[int, int],
         text: str,
-        base_color: str,
-        hovering_color: str,
-        default_img_path: Path,
-        selected_img_path: Path,
-        size: tuple[int, int] = (220, 50),
+        default_img_path: Path = "assets/menu/buttons_rect/button_default.png",
+        selected_img_path: Path = "assets/menu/buttons_rect/button_selected.png",
+        base_color: str = "#9DC19DCC",
+        hovering_color: str = "#FFFFFF",
+        size: tuple[int, int] = (270, 60),
+
     ) -> None:
+        """
+        Initializes the Button object with position, text, colors, and images.
+
+        Args:
+            pos (tuple[int, int]): The (x, y) position of the button center.
+            text (str): The text to display on the button.
+            base_color (str): The base color of the text.
+            hovering_color (str): The color of the text when hovered.
+            default_img_path (Path): Path to the default button image.
+            selected_img_path (Path): Path to the selected button image.
+            size (tuple[int, int], optional): Size to scale the button images. Defaults to (220, 50).
+
+        Returns:
+            None
+        """
 
         # Load button images
         self.default_image = game.image.load(default_img_path).convert_alpha()
