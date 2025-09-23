@@ -2,7 +2,7 @@ import pygame as game
 from settings.settings import CELL_NUMBER_X, CELL_NUMBER_Y
 from classes.Snake.Snake import Snake
 from classes.Item.Item import Item
-from classes.Score.Score import Score
+from gui.Hud.Hud import HUD_Score as Score
 
 
 class Main:

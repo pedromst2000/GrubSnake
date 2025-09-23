@@ -2,9 +2,9 @@ import pygame as game
 import os
 
 
-class Score:
+class HUD_Score:
     """
-    Class to manage the score and high score display.
+    Class to manage and display the player's score and high score.
     """
 
     def __init__(
@@ -47,7 +47,7 @@ class Score:
         self.score += amount
         if self.score > self.high_score:
             self.high_score = self.score
-            self.save_high_score()  # save high score when beaten - beaten means surpassing the previous high score
+            self.save_high_score()  # save high score immediately when updated 
 
     def draw_score(self, screen: game.Surface, pos=(20, 20)) -> None:
         """Draw the score HUD."""

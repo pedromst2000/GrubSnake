@@ -31,7 +31,9 @@ def ease_in_out_curve(t: float) -> float:
     return lerp(0, 1, t * t * (3 - 2 * t))
 
 
-def fade_in(SCREEN: game.Surface, draw_callback: callable, duration: int = 1000) -> None:
+def fade_in(
+    SCREEN: game.Surface, draw_callback: callable, duration: int = 1000
+) -> None:
     """
     Performs a fade-in animation for the given screen.
 
