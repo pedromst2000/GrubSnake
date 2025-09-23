@@ -4,7 +4,7 @@ import pygame as game
 SCREEN_WIDTH = 950
 SCREEN_HEIGHT = 600
 
-# Snake & food size
+# Snake & items size of the game
 CELL_SIZE = 30  # the size of each cell in pixels
 
 # Auto-calculate grid
