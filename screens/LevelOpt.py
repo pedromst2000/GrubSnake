@@ -1,7 +1,7 @@
 import pygame as game
 import sys
 from pathlib import Path
-from renderers.sounds import SOUNDS
+from renderers.sounds import SELECT_BTN_SOUND
 from renderers.background import render_background
 from renderers.text import render_text
 from renderers.buttons import render_buttons
@@ -57,7 +57,7 @@ def level_opt_screen(SCREEN: game.Surface) -> None:
                 screen=SCREEN,
                 menu_mouse_pos=game.mouse.get_pos(),
                 selected_idx=level_opt_screen.selected_idx,
-                hovering_sound=SOUNDS["menu"]["select"],
+                hovering_sound=SELECT_BTN_SOUND,
             )
 
         fade_in(SCREEN, render_level_options, duration=550)

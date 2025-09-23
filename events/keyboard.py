@@ -1,6 +1,6 @@
 import pygame as game
 import sys
-from renderers.sounds import SOUNDS
+from renderers.sounds import CLICK_BTN_SOUND, SELECT_BTN_SOUND
 from gui.Button.Button import Button
 
 
@@ -31,12 +31,12 @@ def handle_keydown_navigation(
         selected_idx = (
             selected_idx + 1
         ) % num_buttons  # Wrap around and increment index
-        SOUNDS["menu"]["select"].play()  # Selection sound
+        SELECT_BTN_SOUND.play()  # Selection sound
     elif event.key == game.K_UP:
         selected_idx = (
             selected_idx - 1
         ) % num_buttons  # Wrap around and decrement index
-        SOUNDS["menu"]["select"].play()  # Selection sound
+        SELECT_BTN_SOUND.play()  # Selection sound
     elif event.key in (
         game.K_RETURN,
         game.K_KP_ENTER,
@@ -44,8 +44,8 @@ def handle_keydown_navigation(
     ):  # Enter or Space key
         selected_btn = buttons[selected_idx]  # Get the currently selected button
         if selected_btn.check_for_input(selected=True):  # Confirm selection
-            SOUNDS["menu"]["click"].play()  # Click sound
-            selected_nvl = selected_btn.text_str.lower()
+            CLICK_BTN_SOUND.play()  # Click sound
+            selected_nvl = selected_btn.text_str.lower()  # Update selected level
 
             if screens and SCREEN is not None:
                 if selected_btn.text_str == "PLAY":
@@ -57,10 +57,9 @@ def handle_keydown_navigation(
 
                 elif selected_nvl is not None:
                     if selected_btn.text_str in ["EASY", "MEDIUM", "HARD"]:
-                        # screens[0](SCREEN, selected_btn.text_str.lower())
-                        print(f"Selected level: {selected_nvl}")  # For testing purposes
+                        screens[0](SCREEN, selected_nvl)
+
                 if selected_btn.text_str == "EXIT":
-                    SOUNDS["menu"]["music"].stop()
                     game.quit()
                     sys.exit()
 

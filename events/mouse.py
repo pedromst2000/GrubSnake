@@ -1,6 +1,6 @@
 import pygame as game
 import sys
-from renderers.sounds import SOUNDS
+from renderers.sounds import CLICK_BTN_SOUND as HOOVER_BTN_SOUND
 from gui.Button.Button import Button
 
 
@@ -31,7 +31,7 @@ def handle_mouse_navigation(
         if button.check_for_input(position=mouse_pos):
             selected_idx = idx
             selected_nvl = button.text_str.lower()  # Update selected level
-            SOUNDS["menu"]["click"].play()  # Click sound
+            HOOVER_BTN_SOUND.play()  # Hover sound
 
             if screens and SCREEN is not None:  # Only proceed if screens are provided
                 if button.text_str == "PLAY":
@@ -41,10 +41,8 @@ def handle_mouse_navigation(
                 elif button.text_str == "INSTRUCTIONS":
                     screens[1](SCREEN)
                 elif button.text_str in ["EASY", "MEDIUM", "HARD"]:
-                    # screens[0](SCREEN, selected_nvl)  # Call the screen function with selected level
-                    print(f"Selected level: {selected_nvl}")  # For testing purposes
+                    screens[0](SCREEN, selected_nvl)  # Call the screen function with selected level
                 elif button.text_str == "EXIT":
-                    SOUNDS["menu"]["music"].stop()
                     game.quit()
                     sys.exit()
 

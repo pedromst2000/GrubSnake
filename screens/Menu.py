@@ -3,7 +3,7 @@ import sys
 from pathlib import Path
 from renderers.background import render_background
 from renderers.text import render_text
-from renderers.sounds import SOUNDS
+from renderers.sounds import MENU_MUSIC_SOUND, SELECT_BTN_SOUND
 from renderers.buttons import render_buttons
 from gui.Button.Button import Button
 from screens.Instructions import instructions_screen
@@ -39,7 +39,7 @@ def main_menu_screen(SCREEN: game.Surface) -> None:
     if not hasattr(main_menu_screen, "selected_idx"):
         main_menu_screen.selected_idx = 0  # Default to the first button / To manage the state of the selected button
 
-    SOUNDS["menu"]["music"].play(loops=-1)
+    MENU_MUSIC_SOUND.play(loops=-1)
 
     while True:
         SCREEN.blit(BG, (0, 0))
@@ -68,7 +68,7 @@ def main_menu_screen(SCREEN: game.Surface) -> None:
             screen=SCREEN,
             menu_mouse_pos=MENU_MOUSE_POS,
             selected_idx=main_menu_screen.selected_idx,
-            hovering_sound=SOUNDS["menu"]["select"],
+            hovering_sound=SELECT_BTN_SOUND,
         )
 
         # Event handling
