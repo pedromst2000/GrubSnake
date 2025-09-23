@@ -46,7 +46,7 @@ def level_opt_screen(SCREEN: game.Surface) -> None:
 
             render_text(
                 text="CHOOSE THE LEVEL TO PLAY",
-                color="#007b2f",
+                color="#005f1a",
                 SCREEN=SCREEN,
                 type="input",
                 effect="none",
