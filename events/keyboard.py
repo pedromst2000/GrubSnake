@@ -1,6 +1,6 @@
-import pygame as game
+import pygame as game  # TODO: Change alias to 'pyg'
 import sys
-from renderers.sounds import CLICK_BTN_SOUND, SELECT_BTN_SOUND
+from renderers.sounds import CLICK_BTN_SOUND, SELECT_BTN_SOUND, MOVE_SNAKE_SOUND
 from gui.Button.Button import Button
 
 
@@ -64,3 +64,31 @@ def handle_keydown_navigation(
                     sys.exit()
 
     return selected_idx
+
+
+def handle_keydown_snake_movement(
+    event: game.event.Event,
+    main_game: callable = None,
+) -> None:
+    """
+    Handles keydown events for snake movement (WASD and arrow keys).
+
+    Args:
+        event (game.event.Event): The keydown event.
+        main_game (callable | None): The main game instance containing the snake object.
+    Returns:
+        None
+    """
+
+    if event.key in (game.K_UP, game.K_w) and main_game.snake.direction.y != 1:
+        main_game.snake.direction = game.Vector2(0, -1)
+        MOVE_SNAKE_SOUND.play()
+    elif event.key in (game.K_DOWN, game.K_s) and main_game.snake.direction.y != -1:
+        main_game.snake.direction = game.Vector2(0, 1)
+        MOVE_SNAKE_SOUND.play()
+    elif event.key in (game.K_LEFT, game.K_a) and main_game.snake.direction.x != -1:
+        main_game.snake.direction = game.Vector2(-1, 0)
+        MOVE_SNAKE_SOUND.play()
+    elif event.key in (game.K_RIGHT, game.K_d) and main_game.snake.direction.x != 1:
+        main_game.snake.direction = game.Vector2(1, 0)
+        MOVE_SNAKE_SOUND.play()
