@@ -1,5 +1,7 @@
 import pygame as game
 import os
+from pathlib import Path
+from renderers.text import render_text
 
 
 class HUD_Score:
@@ -7,29 +9,30 @@ class HUD_Score:
     Class to manage and display the player's score and high score.
     """
 
-    def __init__(
-        self, font: game.font.Font, byte_icon: game.Surface, level: str
-    ) -> None:
+    def __init__(self, level: str) -> None:
         """
         Constructor for the Score class.
 
-        Initializes the score, high score, font, and byte icon.
+        Initializes the score, high score, font, and apple icon.
         """
 
         self.score = 0
-        self.font = font
         self.level = level
+        self.apple_icon = game.image.load(Path("assets/graphics/items/apple.png"))
 
         # --- Trim transparent padding from the icon so centering uses visible pixels
-        self.byte_icon = byte_icon.convert_alpha()
-        bounds = self.byte_icon.get_bounding_rect()
-        self.byte_icon = self.byte_icon.subsurface(bounds).copy()
-        self.icon_size = self.byte_icon.get_size()
+        self.apple_icon = self.apple_icon.convert_alpha()
+        bounds = self.apple_icon.get_bounding_rect()
+        self.apple_icon = self.apple_icon.subsurface(bounds).copy()
+        self.icon_size = self.apple_icon.get_size()
+
+        # Store base apple (unscaled, only processed once)
+        self.apple_icon = self.apple_icon
 
         # HUD styling
-        self.padding = 10
+        self.padding = 15
         self.spacing = 12
-        self.bg_color = (0, 0, 0, 35)  # semi-transparent
+        self.bg_color = (0, 0, 0, 50)  # semi-transparent
         self.text_color = (255, 255, 255)  # white
 
         # High score file path
@@ -47,19 +50,29 @@ class HUD_Score:
         self.score += amount
         if self.score > self.high_score:
             self.high_score = self.score
-            self.save_high_score()  # save high score immediately when updated 
+            self.save_high_score()  # save high score immediately when updated
 
     def draw_score(self, screen: game.Surface, pos=(20, 20)) -> None:
-        """Draw the score HUD."""
+        """Draw the score HUD.
+        Args:
+            screen (game.Surface): The surface to draw the HUD on.
+            pos (tuple): The top-left position to draw the HUD.
+        Returns:
+            None
+        """
         text = f"{self.score}   HI {self.high_score}"
-        text_surface = self.font.render(text, True, self.text_color)
+        text_surface = render_text(
+            text, self.text_color, type="label", return_surface=True
+        )
 
-        # Scale the icon to fit the text height
-        desired_icon_size = (text_surface.get_height(),) * 2
-        if self.byte_icon.get_size() != desired_icon_size:
-            icon = game.transform.smoothscale(self.byte_icon, desired_icon_size)
+        # Make the icon ~1.4x the text height so it feels balanced
+        icon_height = int(text_surface.get_height() * 1.4)
+        desired_icon_size = (icon_height, icon_height)
+
+        if self.apple_icon.get_size() != desired_icon_size:
+            icon = game.transform.smoothscale(self.apple_icon, desired_icon_size)
         else:
-            icon = self.byte_icon
+            icon = self.apple_icon
 
         # Content (icon + spacing + text)
         content_w = desired_icon_size[0] + self.spacing + text_surface.get_width()
@@ -76,22 +89,19 @@ class HUD_Score:
         center_y = box_h // 2  # For vertical centering
 
         # Icon rect
-        icon_rect = icon.get_rect()  # Get the rectangle for the icon surface
-        icon_rect.left = self.padding  # Set left padding
-        icon_rect.centery = center_y  # Center vertically
+        icon_rect = icon.get_rect()
+        icon_rect.left = self.padding
+        icon_rect.centery = center_y
 
         # Text rect
-        text_rect = text_surface.get_rect()  # Get the rectangle for the text surface
-        text_rect.left = (
-            icon_rect.right + self.spacing
-        )  # Position text to the right of the icon
-        text_rect.centery = center_y + 4  # Adjust vertical position
+        text_rect = text_surface.get_rect()
+        text_rect.left = icon_rect.right + self.spacing
+        text_rect.centery = center_y  # aligned with icon center
 
-        # Blit - means to copy the pixels from one surface to another
+        # Blit
         box.blit(icon, icon_rect)
         box.blit(text_surface, text_rect)
 
-        # Place HUD on screen
         screen.blit(box, pos)
 
     def load_high_score(self) -> int:
@@ -135,7 +145,9 @@ class HUD_Score:
                 for line in f:
                     parts = line.strip().split(";")  # Split line into parts
                     if len(parts) == 2:  # Check if line is valid
-                        scores[parts[0]] = parts[1]  # Store score for each level => level;score
+                        scores[parts[0]] = parts[
+                            1
+                        ]  # Store score for each level => level;score
 
         # Update the score for the current level
         scores[self.level] = str(self.high_score)

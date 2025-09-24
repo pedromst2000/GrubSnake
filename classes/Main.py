@@ -11,14 +11,13 @@ class Main:
         eat_sound: game.mixer.Sound,
         poison_sound: game.mixer.Sound,
         game_over_sound: game.mixer.Sound,
-        font: game.font.Font,
-        apple_icon_small: game.Surface,
+        selected_level: str
     ):
         """
         Initialize the main game class.
         """
         self.snake = Snake()
-        self.level = "hard"  # hardcoded
+        self.level = selected_level
         self.apple = Item(self.snake.body, "assets/graphics/items/apple.png")
         self.poison = (
             Item(self.snake.body, "assets/graphics/items/poison.png")
@@ -28,8 +27,7 @@ class Main:
         self.eat_sound = eat_sound
         self.poison_sound = poison_sound
         self.game_over_sound = game_over_sound
-        self.font = font
-        self.score_HUD = Score(font, apple_icon_small, self.level)
+        self.score_HUD = Score(self.level)
 
     def update_game(self):
         """
