@@ -49,7 +49,7 @@ def gameplay_screen(SCREEN: game.Surface, chosen_level: str) -> None:
 
     clock = game.time.Clock()  # Control the frame rate
 
-    fade_in(SCREEN, render_fade_in, duration=550)
+    fade_in(SCREEN, render_fade_in, duration=1550)
 
     while True:
 
