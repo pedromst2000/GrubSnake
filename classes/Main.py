@@ -56,14 +56,14 @@ class Main:
         Check for collisions with the apple.
         """
 
-        if self.snake.body[0] == self.apple.pos:
+        if self.snake.body[0] == self.apple.pos:  # head collides with apple
             eat_sound.play()
-            self.snake.add_block()
+            self.snake.add_block()  # Grow the snake
             self.score_HUD.add_score(1)
             self.apple.randomize_position(self.snake.body)
             if self.poison:
                 self.poison.randomize_position(self.snake.body)
-        elif self.poison and self.snake.body[0] == self.poison.pos:
+        elif self.poison and self.snake.body[0] == self.poison.pos:  # if the head collides with poison
             poison_sound.play()
             self.score_HUD.add_score(-1)
             self.apple.randomize_position(self.snake.body)

@@ -45,7 +45,7 @@ def gameplay_screen(SCREEN: game.Surface, chosen_level: str) -> None:
         """
         SCREEN.blit(BG, (0, 0))
 
-    game.time.set_timer(MOVE_EVENT, LEVELS[main_game.level]["move_interval"])
+    game.time.set_timer(MOVE_EVENT, LEVELS[chosen_level]["move_interval"])
 
     clock = game.time.Clock()  # Control the frame rate
 
@@ -61,8 +61,9 @@ def gameplay_screen(SCREEN: game.Surface, chosen_level: str) -> None:
                 sys.exit()
             if event.type == game.KEYDOWN:
                 handle_keydown_snake_movement(event, main_game=main_game)
+            elif event.type == MOVE_EVENT:
+                main_game.update_game()
 
-        main_game.update_game()
         main_game.draw_elements(SCREEN)
         game.display.flip()
-        clock.tick(LEVELS[main_game.level]["fps"])  # Limit to 60 FPS
+        clock.tick(60)  # smooth rendering
