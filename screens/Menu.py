@@ -47,7 +47,7 @@ def main_menu_screen(SCREEN: game.Surface) -> None:
 
         # Render title with shadow
         render_text(
-            text="BITSNAKE",
+            text="GRUBSNAKE",
             color="#285f25",
             SCREEN=SCREEN,
             type="title",
@@ -55,7 +55,7 @@ def main_menu_screen(SCREEN: game.Surface) -> None:
             offset=(7, 6.7),
         )
         render_text(
-            text="BITSNAKE",
+            text="GRUBSNAKE",
             color="#6FC96A",
             SCREEN=SCREEN,
             type="title",
