@@ -1,15 +1,11 @@
 import pygame as game
 
 
-def instructions_screen(SCREEN: game.Surface) -> None:
+def instructions_screen(SCREEN: game.Surface):
     """
-    Displays the instructions for the game.
+    Displays the instructions screen.
 
-    Args:
-    - SCREEN (game.Surface): The main display surface where the instructions will be rendered.
-
-    Returns:
-    - None
+    :param SCREEN: The main display surface where the instructions will be rendered.
     """
 
     while True:
@@ -21,5 +17,5 @@ def instructions_screen(SCREEN: game.Surface) -> None:
                 game.quit()
                 exit()
             print("INSTRUCTIONS SCREEN")
-                
-        game.display.update() 
+
+        game.display.update()

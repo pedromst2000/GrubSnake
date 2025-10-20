@@ -15,25 +15,25 @@ def handle_keydown_navigation(
     """
     Handles keydown events for menu navigation (up/down arrows and enter/space key).
 
-    Args:
-        event (game.event.Event): The keydown event.
-        selected_idx (int): The currently selected button index.
-        num_buttons (int): The total number of buttons.
-        buttons (list[Button]): The list of Button objects.
-        screens (list[callable] | None): A list of screen functions corresponding to the buttons.
-        SCREEN (game.Surface | None): The main display surface where the screens will be rendered.
+
+       :param event: The keydown event.
+       :param selected_idx: The currently selected button index.
+       :param num_buttons: The total number of buttons.
+       :param buttons: The list of Button objects.
+       :param screens: A list of screen functions corresponding to the buttons.
+       :param SCREEN: The main display surface where the screens will be rendered.
 
     Returns:
         int: The updated selected button index.
     """
 
     if event.key == game.K_DOWN:
-        selected_idx = (
+        selected_idx: int = (
             selected_idx + 1
         ) % num_buttons  # Wrap around and increment index
         SELECT_BTN_SOUND.play()  # Selection sound
     elif event.key == game.K_UP:
-        selected_idx = (
+        selected_idx: int = (
             selected_idx - 1
         ) % num_buttons  # Wrap around and decrement index
         SELECT_BTN_SOUND.play()  # Selection sound
@@ -42,10 +42,12 @@ def handle_keydown_navigation(
         game.K_KP_ENTER,
         game.K_SPACE,
     ):  # Enter or Space key
-        selected_btn = buttons[selected_idx]  # Get the currently selected button
+        selected_btn: Button = buttons[
+            selected_idx
+        ]  # Get the currently selected button
         if selected_btn.check_for_input(selected=True):  # Confirm selection
             CLICK_BTN_SOUND.play()  # Click sound
-            selected_nvl = selected_btn.text_str.lower()  # Update selected level
+            selected_nvl: str = selected_btn.text_str.lower()  # Update selected level
 
             if screens and SCREEN is not None:
                 if selected_btn.text_str == "PLAY":
@@ -69,15 +71,13 @@ def handle_keydown_navigation(
 def handle_keydown_snake_movement(
     event: game.event.Event,
     main_game: callable = None,
-) -> None:
+):
     """
     Handles keydown events for snake movement (WASD and arrow keys).
 
-    Args:
-        event (game.event.Event): The keydown event.
-        main_game (callable | None): The main game instance containing the snake object.
-    Returns:
-        None
+        :param event: The keydown event.
+        :param main_game: The main game instance containing the snake object.
+
     """
 
     if event.key in (game.K_UP, game.K_w) and main_game.snake.direction.y != 1:

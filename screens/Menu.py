@@ -12,15 +12,17 @@ from events.keyboard import handle_keydown_navigation
 from events.mouse import handle_mouse_navigation
 
 
-def main_menu_screen(SCREEN: game.Surface) -> None:
+def main_menu_screen(SCREEN: game.Surface):
     """
     Displays the main menu screen of the game.
-    """
-    BG = render_background(Path("assets/backgrounds/main_menu_bg.png"))
+    
+    :param SCREEN: The main display surface where the menu will be rendered.
+    """ 
+    BG: game.Surface = render_background(Path("assets/backgrounds/main_menu_bg.png"))
 
     # TODO: TO ADD RENDER LAYOUT FOR CENTERING ELEMENTS ON THE SCREEN WITH A LAYOUT MANAGER FUNCTION - REFACTOR CODE
 
-    BUTTONS = [
+    BUTTONS: list[Button] = [
         Button(
             pos=(SCREEN.get_width() / 2, 250),
             text="PLAY",
@@ -43,7 +45,7 @@ def main_menu_screen(SCREEN: game.Surface) -> None:
 
     while True:
         SCREEN.blit(BG, (0, 0))
-        MENU_MOUSE_POS = game.mouse.get_pos()
+        MENU_MOUSE_POS: tuple[int, int] = game.mouse.get_pos()
 
         # Render title with shadow
         render_text(

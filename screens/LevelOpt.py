@@ -12,14 +12,16 @@ from screens.gameplay import gameplay_screen
 from animations.fading import fade_in
 
 
-def level_opt_screen(SCREEN: game.Surface) -> None:
+def level_opt_screen(SCREEN: game.Surface):
     """
     Displays the level options screen where the player can choose the difficulty level.
+    
+    :param SCREEN: The main display surface where the level options will be rendered.
     """
 
-    BG = render_background(Path("assets/backgrounds/level_opt_bg.png"))
+    BG: game.Surface = render_background(Path("assets/backgrounds/level_opt_bg.png"))
 
-    BUTTONS = [
+    BUTTONS: list[Button] = [
         Button(
             pos=(SCREEN.get_width() / 2, 250),
             text="EASY",
@@ -40,7 +42,7 @@ def level_opt_screen(SCREEN: game.Surface) -> None:
 
         # TODO : REFACTOR THIS CODE TO INCLUDE THE RENDER UI ELEMENTS WITH A FUNCTION HELPER
 
-        def render_level_options() -> None:
+        def render_level_options():
             """Helper function to draw the entire level options screen."""
             SCREEN.blit(BG, (0, 0))
 
