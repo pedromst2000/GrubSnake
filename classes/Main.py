@@ -153,6 +153,7 @@ class Main:
             self.poison_sound.play()
             self.score_HUD.add_score(-1)
             self.poisons.remove(head)
+            self.snake.shrink()
 
     def check_fail(self):
         """

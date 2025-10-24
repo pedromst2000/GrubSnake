@@ -179,6 +179,13 @@ class Snake:
         """
         self.new_block: bool = True  # Set the flag to indicate the snake should grow
 
+    def shrink(self):
+        """
+        Method class for removing a block from the snake. (Shrink the Snake)
+        """
+        if len(self.body) > 3:  # Ensure the snake has more than the minimum length
+            self.body.pop()  # Remove the last block of the snake
+
     def reset(self):
         """
         Method class for resetting the snake to its initial state.
