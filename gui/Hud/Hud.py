@@ -2,6 +2,7 @@ import pygame as game
 import os
 from pathlib import Path
 from renderers.text import render_text
+import globals.states.score as score_state
 
 
 class HUD_Score:
@@ -57,9 +58,12 @@ class HUD_Score:
         :param amount: The amount to add to the score (default is 1).
         """
         self.score += amount
+        score_state.apples_eaten = self.score  # update module-level score state
         if self.score > self.high_score:
             self.high_score: int = self.score
             self.save_high_score()  # save high score immediately when updated
+        if self.score < 0:
+            self.score = 0  # prevent negative scores
 
     def draw_score(self, screen: game.Surface, pos=(20, 20)):
         """Draw the score HUD.

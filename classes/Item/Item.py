@@ -2,6 +2,7 @@ import pygame as game
 from pygame import Vector2
 import random
 from settings.settings import CELL_SIZE, CELL_NUMBER_X, CELL_NUMBER_Y
+import globals.states.score as score_state
 
 
 class Item:
@@ -75,8 +76,13 @@ class Item:
         }
         forbidden.add((int(apple_pos.x), int(apple_pos.y)))
 
+        apples_eaten = score_state.apples_eaten
+
         if level == "medium":
-            count: int = random.randint(8, 18)
+            base_min = 8
+            base_max = 18  # default max poisons
+            max_limit = base_max + apples_eaten
+            count: int = random.randint(base_min, max_limit)
         else:  # hard
             count: int = random.randint(5, 10)
 
