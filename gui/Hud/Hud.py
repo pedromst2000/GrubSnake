@@ -77,7 +77,9 @@ class HUD_Score:
         desired_icon_size: tuple[int, int] = (icon_height, icon_height)
 
         if self.apple_icon.get_size() != desired_icon_size:
-            icon: game.Surface = game.transform.smoothscale(self.apple_icon, desired_icon_size)
+            icon: game.Surface = game.transform.smoothscale(
+                self.apple_icon, desired_icon_size
+            )
         else:
             icon: game.Surface = self.apple_icon
 
@@ -114,7 +116,7 @@ class HUD_Score:
     def load_high_score(self) -> int:
         """
         Load the high score for the current level from a file.
-        
+
         Returns:
             int: The high score for the current level.
         """
@@ -133,15 +135,12 @@ class HUD_Score:
         # Search for the current level in the file
         for line in lines:
             parts: list[str] = line.strip().split(";")
-            if len(parts) == 2 and parts[0] == self.level:
-                try:
-                    return int(parts[1])
-                except ValueError:
-                    return 0
+            if len(parts) == 2 and parts[0] == self.level:  # found level
+                return int(parts[1])  # return score as int of the level
         # If not found, add entry for current level
         with open(self.file_path, "a", encoding="utf-8") as f:
             f.write(f"{self.level};0\n")
-        return 0
+        return 0  # default high score if level not found
 
     def save_high_score(self):
         """
@@ -154,12 +153,14 @@ class HUD_Score:
                 for line in f:
                     parts: list[str] = line.strip().split(";")  # Split line into parts
                     if len(parts) == 2:  # Check if line is valid
-                        scores[parts[0]] = int(parts[1])  # Store score for each level => level;score
+                        scores[parts[0]] = parts[
+                            1
+                        ].strip()  # Store score for each level => level;score
 
-        # Update the score for the current level
+        # Updating the score for the current level
         scores[self.level] = self.high_score
 
-        # Write all scores back in "level;score" format
+        # Writing all scores back in "level;score" format
         with open(self.file_path, "w", encoding="utf-8") as f:
             for lvl, score in scores.items():
                 f.write(f"{lvl};{score}\n")
