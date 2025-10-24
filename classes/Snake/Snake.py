@@ -2,6 +2,7 @@ from pygame.math import Vector2  # For the draw of the snake with vectors
 import pygame as game
 from settings.settings import CELL_SIZE
 from settings.settings import CELL_NUMBER_X, CELL_NUMBER_Y
+from globals.states.score import apples_eaten as score_state
 
 
 class Snake:
@@ -83,6 +84,34 @@ class Snake:
             "assets/graphics/snake_sprites/body_bottom_left.png"
         )
 
+    def update_head_graphics(self):
+        """
+        Update the graphics for the snake's head based on its direction.
+        """
+        relation: Vector2 = self.body[0] - self.body[1]
+        if relation == Vector2(1, 0):
+            self.head_graphics: game.Surface = self.head_right  # Right
+        elif relation == Vector2(-1, 0):
+            self.head_graphics: game.Surface = self.head_left  # Left
+        elif relation == Vector2(0, 1):
+            self.head_graphics: game.Surface = self.head_down  # Down
+        else:  # Vector2(0, -1)
+            self.head_graphics: game.Surface = self.head_up  # Up
+
+    def update_body_graphics(self):
+        """
+        Update the graphics for the snake's body based on its segments.
+        """
+        relation: Vector2 = self.body[-1] - self.body[-2]
+        if relation == Vector2(1, 0):
+            self.tail_graphics: game.Surface = self.tail_right
+        elif relation == Vector2(-1, 0):
+            self.tail_graphics: game.Surface = self.tail_left
+        elif relation == Vector2(0, 1):
+            self.tail_graphics: game.Surface = self.tail_down
+        else:  # Vector2(0, -1)
+            self.tail_graphics: game.Surface = self.tail_up
+
     def draw_snake(self, screen: game.Surface):
         """
         Method class for drawing the snake on the screen.
@@ -128,34 +157,6 @@ class Snake:
                     ):
                         screen.blit(self.body_br, rect)
 
-    def update_head_graphics(self):
-        """
-        Update the graphics for the snake's head based on its direction.
-        """
-        relation: Vector2 = self.body[0] - self.body[1]
-        if relation == Vector2(1, 0):
-            self.head_graphics: game.Surface = self.head_right  # Right
-        elif relation == Vector2(-1, 0):
-            self.head_graphics: game.Surface = self.head_left  # Left
-        elif relation == Vector2(0, 1):
-            self.head_graphics: game.Surface = self.head_down  # Down
-        else:  # Vector2(0, -1)
-            self.head_graphics: game.Surface = self.head_up  # Up
-
-    def update_body_graphics(self):
-        """
-        Update the graphics for the snake's body based on its segments.
-        """
-        relation: Vector2 = self.body[-1] - self.body[-2]
-        if relation == Vector2(1, 0):
-            self.tail_graphics: game.Surface = self.tail_right
-        elif relation == Vector2(-1, 0):
-            self.tail_graphics: game.Surface = self.tail_left
-        elif relation == Vector2(0, 1):
-            self.tail_graphics: game.Surface = self.tail_down
-        else:  # Vector2(0, -1)
-            self.tail_graphics: game.Surface = self.tail_up
-
     def move_growth(self):
         """
         Method class for moving the snake in the current direction. Handles growth if needed.
@@ -172,7 +173,7 @@ class Snake:
         body_copy.insert(0, new_head)  # Insert new head into the body
         self.body: list[Vector2] = body_copy  # Update the snake's body
 
-    def add_block(self):
+    def grow(self):
         """
         Method class for adding a block to the snake. (Grow of the Snake)
         """

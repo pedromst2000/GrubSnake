@@ -21,7 +21,7 @@ class Main:
     ):
         """
         Initialize the main game with sounds and selected level settings.
-        
+
         :param eat_sound: Sound to play when the snake eats an apple.
         :param poison_sound: Sound to play when the snake eats poison.
         :param game_over_sound: Sound to play on game over.
@@ -135,7 +135,7 @@ class Main:
         # Apple collision
         if head == self.apple.pos:
             self.eat_sound.play()
-            self.snake.add_block()
+            self.snake.grow()
             self.score_HUD.add_score(1)
 
             self.apple.randomize_position(
