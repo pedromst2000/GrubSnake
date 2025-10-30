@@ -51,6 +51,7 @@ class HUD_Score:
     def reset(self):
         """Reset the score when the game ends."""
         self.score: int = 0
+        score_state.apples_eaten = 0
 
     def add_score(self, amount: int = 1):
         """Add to the current score.
@@ -62,8 +63,17 @@ class HUD_Score:
         if self.score > self.high_score:
             self.high_score: int = self.score
             self.save_high_score()  # save high score immediately when updated
+
+    def subtract_score(self, amount: int = 1):
+        """Subtract from the current score.
+
+        :param amount: The amount to subtract from the score (default is 1).
+        """
+        self.score -= amount
+        score_state.apples_eaten = self.score  # update module-level score state
         if self.score < 0:
             self.score = 0  # prevent negative scores
+            score_state.apples_eaten = 0
 
     def draw_score(self, screen: game.Surface, pos=(20, 20)):
         """Draw the score HUD.

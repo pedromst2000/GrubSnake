@@ -2,7 +2,7 @@ import pygame as game
 from pygame import Vector2
 import random
 from settings.settings import CELL_SIZE, CELL_NUMBER_X, CELL_NUMBER_Y
-import globals.states.score as score_state
+import globals.states.score as score_state  # for apples_eaten state tracking
 
 
 class Item:
@@ -73,29 +73,32 @@ class Item:
 
         forbidden: set[tuple[int, int]] = {
             (int(seg.x), int(seg.y)) for seg in snake_body
-        }
-        forbidden.add((int(apple_pos.x), int(apple_pos.y)))
+        }  # positions occupied by the snake
+        forbidden.add((int(apple_pos.x), int(apple_pos.y)))  # position of the apple
 
-        apples_eaten = score_state.apples_eaten
+        apples_eaten: int = score_state.apples_eaten
 
         if level == "medium":
-            base_min = 8
-            base_max = 18  # default max poisons
-            max_limit = base_max + apples_eaten
-            count: int = random.randint(base_min, max_limit)
+            base_min: int = 1
+            base_max: int = 3  # default max poisons
+            min_limit: int = base_min + apples_eaten  # increase min with apples eaten
+            max_limit: int = base_max + apples_eaten  # increase max with apples eaten
+            count: int = random.randint(min_limit, max_limit)
         else:  # hard
-            count: int = random.randint(5, 10)
+            count: int = random.randint(3, 8)
 
         available: list[tuple[int, int]] = [
             (x, y)
-            for x in range(CELL_NUMBER_X)
-            for y in range(CELL_NUMBER_Y)
-            if (x, y) not in forbidden
+            for x in range(CELL_NUMBER_X)  # Iterate over all possible x positions
+            for y in range(CELL_NUMBER_Y)  # Iterate over all possible y positions
+            if (x, y) not in forbidden  # Exclude forbidden positions
         ]
 
         chosen: list[tuple[int, int]] = random.sample(
             available, min(count, len(available))
         )
-        poisons: list[Vector2] = [Vector2(x, y) for x, y in chosen]
+        poisons: list[Vector2] = [
+            Vector2(x, y) for x, y in chosen
+        ]  # Convert to Vector2
 
         return poisons
