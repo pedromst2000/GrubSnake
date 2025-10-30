@@ -2,7 +2,6 @@ from pygame.math import Vector2  # For the draw of the snake with vectors
 import pygame as game
 from settings.settings import CELL_SIZE
 from settings.settings import CELL_NUMBER_X, CELL_NUMBER_Y
-from globals.states.score import apples_eaten as score_state
 
 
 class Snake:
