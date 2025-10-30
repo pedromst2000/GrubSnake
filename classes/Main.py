@@ -1,4 +1,5 @@
 import pygame as game
+import random
 from pygame import Vector2
 from settings.settings import CELL_NUMBER_X, CELL_NUMBER_Y, CELL_SIZE
 from classes.Snake.Snake import Snake
@@ -53,14 +54,14 @@ class Main:
         self.poison_sound: game.mixer.Sound = poison_sound
         self.game_over_sound: game.mixer.Sound = game_over_sound
         self.score_HUD: Score = Score(self.level)
-        self.obstacle_spawn_interval: int = 50  # ~1.5s at 60fps
+        self.obstacle_spawn_interval: int = 120  # delay interval for obstacle spawning
         self._obstacle_spawn_timer: int = 0  # internal timer for obstacle spawning
 
         # Movement speed (grid cells per MOVE_EVENT) for obstacles
         self.obstacle_speed: float = 0.50
         self.obstacle_width: int = 2
         self.obstacle_height: int = 2
-        self.obstacle_gap: int = 6  # min gap between obstacles in a row
+        self.obstacles_count: int = 4  # number of obstacles per row
 
     def update_game(self):
         """
@@ -82,7 +83,7 @@ class Main:
         for obstacle in self.obstacles[:]:
             obstacle.move(speed=self.obstacle_speed)
             if obstacle.is_off_screen():
-                self.obstacles.remove(obstacle)
+                self.obstacles.remove(obstacle)  # Remove off-screen obstacles
 
         # Timer-based spawn: spawn rows periodically, only if top area is free
         self._obstacle_spawn_timer += 1
@@ -103,7 +104,7 @@ class Main:
             self=self,
             obstacle_width=self.obstacle_width,
             obstacle_height=self.obstacle_height,
-            gap=self.obstacle_gap,
+            count=self.obstacles_count,
         )
 
     def draw_elements(self, screen: game.Surface):
@@ -124,7 +125,7 @@ class Main:
 
         if self.obstacles:  # draw obstacles if any
             for obstacle in self.obstacles:
-                obstacle.draw(screen)
+                obstacle.draw(screen)  # draw each obstacle
 
     def check_collision_item(self):
         """
@@ -135,11 +136,26 @@ class Main:
         # Apple collision
         if head == self.apple.pos:
             self.eat_sound.play()
-            self.snake.grow()
+            self.snake.grow()  # grow the snake on apple collision
             self.score_HUD.add_score(1)
+            # the delay interval of obstacle spawning decreases as score increases
+            self.obstacle_spawn_interval = max(
+                0, self.obstacle_spawn_interval - 0.25
+            )  # speed up obstacle spawn
+            # the speed of obstacles increases as score increases
+            self.obstacle_speed += 0.005  # increase obstacle speed
+            self.obstacles_count = random.randint(
+                4, 10
+            )  # randomize number of obstacles
 
             self.apple.randomize_position(
                 self.snake.body, forbidden_positions=self.poisons
+            )
+
+            Item.spawn_poisons(
+                self.snake.body,
+                self.apple.pos,
+                self.level,
             )
 
             if self.poison_image:
@@ -151,9 +167,14 @@ class Main:
         # Poison collision
         if self.poison_image and head in self.poisons:
             self.poison_sound.play()
-            self.score_HUD.add_score(-1)
+            self.score_HUD.subtract_score(1)
             self.poisons.remove(head)
-            self.snake.shrink()
+            self.snake.shrink()  # shrink the snake on poison collision
+            # increase the delay interval but not above base 120
+            self.obstacle_spawn_interval = min(120, self.obstacle_spawn_interval + 0.25)
+            self.obstacle_speed = max(
+                0.70, self.obstacle_speed - 0.005
+            )  # decrease obstacle speed but not below base
 
     def check_fail(self):
         """
@@ -197,6 +218,9 @@ class Main:
         self.obstacles: list[Obstacle] = (
             [] if self.level == "hard" else None
         )  # reset obstacles
+        self.obstacle_spawn_interval = 120  # reset spawn interval
+        self.obstacle_speed = 0.70  # reset obstacle speed
+        self.obstacles_count = 4  # reset obstacle count
 
         self.apple.randomize_position(self.snake.body)  # respawn apple
         if self.poison_image:  # respawn poisons

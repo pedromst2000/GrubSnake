@@ -11,16 +11,14 @@ class Obstacle:
     Optional `x` param to specify column; if None, chooses randomly.
     """
 
-    def __init__(
-        self, image_path: str, width: int = 2, height: int = 2, x: int | None = None
-    ):
+    def __init__(self, image_path: str, width: int, height: int, x: int | None = None):
         """
         :param image_path: Path to the obstacle image.
-        :param width: How many cells wide the obstacle is (defaults to 2).
-        :param height: How many cells high the obstacle is (defaults to 2).
+        :param width: How many cells wide the obstacle is.
+        :param height: How many cells high the obstacle is.
         :param x: optional fixed X column to spawn at (grid coordinate).
         """
-        # ensure at least 1 and keep width/height as ints
+        # Clamp width and height to at least 1
         self.width: int = max(1, int(width))
         self.height: int = max(1, int(height))
 
@@ -39,6 +37,17 @@ class Obstacle:
         # Start just above the visible screen so the row enters smoothly
         self.y: int = -self.height
         self.pos: game.math.Vector2 = game.math.Vector2(self.x, self.y)
+
+    def draw(self, screen: game.Surface):
+        """
+        Draw the obstacle at its grid-aligned position (rounded y).
+
+        :param screen: Pygame surface to draw on.
+
+        """
+        pixel_y: int = int(self.y) * CELL_SIZE
+        if pixel_y + (self.height * CELL_SIZE) >= 0 and pixel_y < SCREEN_HEIGHT:
+            screen.blit(self.image, (self.x * CELL_SIZE, pixel_y))
 
     def move(self, speed: float):
         """
@@ -64,66 +73,60 @@ class Obstacle:
                 cells.append(game.math.Vector2(self.x + dx, base_y + dy))
         return cells
 
-    def spawn_obstacle_row(self, obstacle_width: int, obstacle_height: int, gap: int):
+    def spawn_obstacle_row(self, obstacle_width: int, obstacle_height: int, count: int):
         """
-        Spawn a row of obstacles at the top of the screen.
+        Spawn `count` obstacles distributed evenly across the top row.
 
         :param obstacle_width: Width of each obstacle in grid cells.
         :param obstacle_height: Height of each obstacle in grid cells.
-        :param gap: Minimum gap between obstacles in grid cells.
-
+        :param count: Number of obstacles to spawn in the row (will be clamped to fit).
         """
         width: int = max(1, int(obstacle_width))
-        gap: int = max(0, int(gap))
-
-        step: int = width + gap
-        if step <= 0:
-            step: int = width + 1
-
-        # Compute centered start offset so obstacles are centered across entire grid
         total_slots: int = CELL_NUMBER_X
-        # number of full placements that fit
-        placements: int = total_slots // step
-        # try to place as many as fit; if there's leftover columns, center them
-        used_columns: int = (
-            placements * step - gap
-        )  # last obstacle doesn't need trailing gap
-        leftover: int = total_slots - used_columns
-        start_offset: int = leftover // 2  # integer center offset
 
-        x: int = start_offset
-        spawned: int = 0
-        while x + width <= CELL_NUMBER_X:
-            # instantiate obstacle at column x
+        # Use a layout width that cannot exceed the grid to avoid negative spacing.
+        layout_width: int = min(width, total_slots)
+
+        # Maximum number of obstacles that can fit given the obstacle width.
+        max_count: int = max(1, total_slots // layout_width)
+
+        # Clamp requested count to a sensible range.
+        count: int = max(1, min(int(count), max_count))
+
+        total_occupied: int = count * layout_width
+        leftover: int = total_slots - total_occupied
+        gaps: int = count + 1  # slots before/between/after obstacles
+
+        base_gap: int = leftover // gaps if gaps > 0 else 0
+        extra: int = leftover % gaps if gaps > 0 else 0
+
+        current_x: int = 0
+        for i in range(count):
+            # gap before this obstacle
+            gap_size = base_gap + (1 if extra > 0 else 0)
+            if extra > 0:
+                extra -= 1
+            current_x += gap_size
+
+            # instantiate obstacle at column current_x
             ob: Obstacle = Obstacle(
                 "assets/graphics/items/trap.png",
                 width=width,
                 height=obstacle_height,
-                x=x,
+                x=current_x,
             )
             self.obstacles.append(ob)
-            spawned += 1
-            x += step
+
+            # move past this obstacle for next iteration
+            current_x += layout_width
 
     def is_off_screen(self) -> bool:
         """
         Return whether the obstacle has moved past the bottom edge of the screen.
-        Determines if the obstacle's bottom (self.y + self.height), scaled by CELL_SIZE,
-        has reached or exceeded SCREEN_HEIGHT.
+        An obstacle is considered off-screen if its top edge has reached or exceeded SCREEN_HEIGHT.
 
         Returns:
             bool: True if the obstacle is off the bottom of the screen, False otherwise.
         """
 
-        return (self.y + self.height) * CELL_SIZE >= SCREEN_HEIGHT
-
-    def draw(self, screen: game.Surface):
-        """
-        Draw the obstacle at its grid-aligned position (rounded y).
-
-        :param screen: Pygame surface to draw on.
-
-        """
-        pixel_y: int = int(self.y) * CELL_SIZE
-        if pixel_y + (self.height * CELL_SIZE) >= 0 and pixel_y < SCREEN_HEIGHT:
-            screen.blit(self.image, (self.x * CELL_SIZE, pixel_y))
+        return self.y * CELL_SIZE >= SCREEN_HEIGHT
