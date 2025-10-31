@@ -1,7 +1,13 @@
 import pygame as game
 import random
 from pygame import Vector2
-from settings.settings import CELL_NUMBER_X, CELL_NUMBER_Y, CELL_SIZE
+from settings.settings import (
+    CELL_NUMBER_X,
+    CELL_NUMBER_Y,
+    CELL_SIZE,
+    LEVELS,
+    MOVE_EVENT,
+)
 from classes.Snake.Snake import Snake
 from classes.Item.Item import Item
 from classes.Obstacle.Obstacle import Obstacle
@@ -49,7 +55,7 @@ class Main:
             self.poisons: list[Item] = Item.spawn_poisons(
                 self.snake.body, self.apple.pos, self.level
             )
-
+        self.snake_speed: int = LEVELS[self.level]["move_interval"]
         self.eat_sound: game.mixer.Sound = eat_sound
         self.poison_sound: game.mixer.Sound = poison_sound
         self.game_over_sound: game.mixer.Sound = game_over_sound
@@ -144,13 +150,20 @@ class Main:
             )  # speed up obstacle spawn
             # the speed of obstacles increases as score increases
             self.obstacle_speed += 0.005  # increase obstacle speed
-            self.obstacles_count = random.randint(
+            self.obstacles_count: int = random.randint(
                 4, 10
             )  # randomize number of obstacles
 
             self.apple.randomize_position(
                 self.snake.body, forbidden_positions=self.poisons
             )
+
+            # medium level speed increases slightly with each apple eaten
+            if self.level == "medium":
+                self.snake_speed = max(20.0, self.snake_speed - 0.05)
+                game.time.set_timer(
+                    MOVE_EVENT, int(self.snake_speed)
+                )  # update timer interval
 
             Item.spawn_poisons(
                 self.snake.body,
@@ -171,10 +184,19 @@ class Main:
             self.poisons.remove(head)
             self.snake.shrink()  # shrink the snake on poison collision
             # increase the delay interval but not above base 120
-            self.obstacle_spawn_interval = min(120, self.obstacle_spawn_interval + 0.25)
-            self.obstacle_speed = max(
+            self.obstacle_spawn_interval: int = min(
+                120, self.obstacle_spawn_interval + 0.25
+            )
+            self.obstacle_speed: float = max(
                 0.70, self.obstacle_speed - 0.005
             )  # decrease obstacle speed but not below base
+            if self.level == "medium":
+                self.snake_speed = min(  # decrease speed but not above base
+                    LEVELS["medium"]["move_interval"], self.snake_speed + 0.05
+                )
+                game.time.set_timer(
+                    MOVE_EVENT, int(self.snake_speed)
+                )  # update timer interval
 
     def check_fail(self):
         """
@@ -218,9 +240,11 @@ class Main:
         self.obstacles: list[Obstacle] = (
             [] if self.level == "hard" else None
         )  # reset obstacles
-        self.obstacle_spawn_interval = 120  # reset spawn interval
-        self.obstacle_speed = 0.70  # reset obstacle speed
-        self.obstacles_count = 4  # reset obstacle count
+        self.obstacle_spawn_interval: int = 120  # reset spawn interval
+        self.obstacle_speed: float = 0.70  # reset obstacle speed
+        self.obstacles_count: int = 4  # reset obstacle count
+        self.snake_speed: int = LEVELS[self.level]["move_interval"]
+        game.time.set_timer(MOVE_EVENT, int(self.snake_speed))  # reset timer interval
 
         self.apple.randomize_position(self.snake.body)  # respawn apple
         if self.poison_image:  # respawn poisons

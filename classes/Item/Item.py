@@ -79,8 +79,8 @@ class Item:
         apples_eaten: int = score_state.apples_eaten
 
         if level == "medium":
-            base_min: int = 1
-            base_max: int = 3  # default max poisons
+            base_min: int = 3
+            base_max: int = 5  # default max poisons
             min_limit: int = base_min + apples_eaten  # increase min with apples eaten
             max_limit: int = base_max + apples_eaten  # increase max with apples eaten
             count: int = random.randint(min_limit, max_limit)

@@ -39,7 +39,9 @@ def gameplay_screen(SCREEN: game.Surface, chosen_level: str):
 
     fade_in(SCREEN, render_fade_in, duration=1550)
 
-    game.time.set_timer(MOVE_EVENT, LEVELS[chosen_level]["move_interval"])
+    game.time.set_timer(
+        MOVE_EVENT, int(round(LEVELS[chosen_level]["move_interval"]))
+    )  # Set snake movement timer
 
     while True:
         SCREEN.blit(BG, (0, 0))  # Clear screen each frame
